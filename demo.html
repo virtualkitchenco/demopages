@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu 86ing Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .filter-area {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .badge {
+      color: white;
+      padding: 5px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .badge.red {
+      background-color: #ff4d4d;
+    }
+    .badge.orange {
+      background-color: #ffa500;
+    }
+    .badge.green {
+      background-color: #28a745;
+    }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .menu-item {
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .menu-item img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .menu-item.inactive img {
+      filter: grayscale(100%);
+    }
+    .toggle-86 {
+      background-color: #ff4d4d;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .toggle-86.active {
+      background-color: #4caf50;
+    }
+    .clear-filter {
+      background-color: #007bff;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Ingredient Filter Area -->
+    <div class="filter-area">
+      <div class="badge red" data-ingredient="spicy">Spicy Sauce (0)</div>
+      <div class="badge orange" data-ingredient="garlic">Garlic (5)</div>
+      <div class="badge green" data-ingredient="bbq">BBQ Sauce (15)</div>
+      <div class="badge green" data-ingredient="honey">Honey (20)</div>
+      <div class="badge green" data-ingredient="ranch">Ranch (25)</div>
+      <div class="badge green" data-ingredient="chicken">Chicken (50)</div>
+      <!-- Add more badges as needed -->
+      <button class="clear-filter">Clear Filter</button>
+    </div>
+
+    <!-- Menu Grid -->
+    <div class="menu-grid">
+      <!-- Menu Item -->
+      <div class="menu-item" data-ingredients="chicken garlic honey">
+        <img src="https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/7a54097b-ddc8-4087-8ed4-73159654a8fb-retina-large.jpg" alt="Honey Garlic Wings">
+        <h3>Honey Garlic Wings</h3>
+        <div class="badge green">Chicken</div>
+        <div class="badge orange">Garlic</div>
+        <div class="badge green">Honey</div>
+        <button class="toggle-86">86</button>
+      </div>
+
+      <!-- Menu Item -->
+      <div class="menu-item" data-ingredients="chicken bbq ranch">
+        <img src="https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/4b31ad3a-485d-4bdb-97a2-6b2f6374297b-retina-large.jpg" alt="BBQ Ranch Wings">
+        <h3>BBQ Ranch Wings</h3>
+        <div class="badge green">Chicken</div>
+        <div class="badge green">BBQ Sauce</div>
+        <div class="badge green">Ranch</div>
+        <button class="toggle-86">86</button>
+      </div>
+
+      <!-- Menu Item -->
+      <div class="menu-item" data-ingredients="chicken spicy garlic">
+        <img src="https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/51b0cd7e-acc9-4405-8d7b-5276b0c30831-retina-large.jpg" alt="Spicy Garlic Wings">
+        <h3>Spicy Garlic Wings</h3>
+        <div class="badge green">Chicken</div>
+        <div class="badge orange">Garlic</div>
+        <div class="badge red">Spicy Sauce</div>
+        <button class="toggle-86">86</button>
+      </div>
+
+      <!-- Add more menu items as needed -->
+    </div>
+  </div>
+
+  <script>
+    // 86ing toggle functionality
+    document.querySelectorAll('.toggle-86').forEach(button => {
+      button.addEventListener('click', function() {
+        const menuItem = this.closest('.menu-item');
+        menuItem.classList.toggle('inactive');
+        this.classList.toggle('active');
+        this.textContent = this.classList.contains('active') ? 'Un86' : '86';
+      });
+    });
+
+    // Ingredient filter functionality
+    document.querySelectorAll('.badge').forEach(badge => {
+      badge.addEventListener('click', function() {
+        const selectedIngredient = this.getAttribute('data-ingredient');
+        document.querySelectorAll('.menu-item').forEach(item => {
+          const ingredients = item.getAttribute('data-ingredients').split(' ');
+          if (ingredients.includes(selectedIngredient)) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Clear filter functionality
+    document.querySelector('.clear-filter').addEventListener('click', function() {
+      // Show all menu items
+      document.querySelectorAll('.menu-item').forEach(item => {
+        item.style.display = 'block';
+      });
+    });
+  </script>
+  
+</body>
+</html>
