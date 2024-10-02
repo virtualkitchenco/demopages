@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu 86ing Tool</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Add the Advanced toggle button -->
+  <div id="advanced-toggle" class="advanced-toggle">
+    <label class="switch">
+      <input type="checkbox" id="advanced-checkbox">
+      <span class="slider round"></span>
+    </label>
+    <span>Advanced</span>
+  </div>
+
+  <div class="container">
+    <!-- Ingredient Filter Area -->
+    <div id="ingredient-filter-area" class="filter-area">
+      <!-- Ingredient badges will be dynamically inserted here -->
+    </div>
+
+    <!-- Equipment Filter Area -->
+    <div id="equipment-filter-area" class="filter-area">
+      <!-- Equipment badges will be dynamically inserted here -->
+    </div>
+
+    <!-- Menu Grid -->
+    <div id="menu-grid" class="menu-grid">
+      <!-- Menu items will be dynamically inserted here -->
+    </div>
+
+    <!-- Add Submit button -->
+    <button id="submit-button" class="submit-button" style="display: none;">Submit</button>
+  </div>
+
+  <script>
+    // Function to render menu items
+    function renderMenuItems(menuItems) {
+      const menuGrid = document.getElementById('menu-grid');
+      menuGrid.innerHTML = '';
+
+      menuItems.forEach(item => {
+        const menuItemElement = document.createElement('div');
+        menuItemElement.className = 'menu-item';
+        menuItemElement.setAttribute('data-ingredients', item.ingredients.join('|'));
+        menuItemElement.setAttribute('data-equipment', item.equipment.join('|'));
+
+        const eightySixReason = localStorage.getItem(`86reason_${item.name}`);
+        if (eightySixReason) {
+          menuItemElement.classList.add('inactive');
+        }
+
+        menuItemElement.innerHTML = `
+          <img src="${item.image}" alt="${item.name}">
+          <h3>${item.name}</h3>
+          <div class="badges">
+            ${item.ingredients.map(ing => `<div class="badge ingredient active" data-ingredient="${ing}">${ing}</div>`).join('')}
+          </div>
+          <div class="badges">
+            ${item.equipment.map(eq => `<div class="badge equipment active" data-equipment="${eq}">${eq}</div>`).join('')}
+          </div>
+          ${eightySixReason ? `<div class="badges"><div class="badge reason inactive">${eightySixReason}</div></div>` : ''}
+          <button class="toggle-86">${eightySixReason ? 'Un86' : '86'}</button>
+        `;
+
+        menuGrid.appendChild(menuItemElement);
+      });
+
+      // Attach event listeners after rendering
+      attachEventListeners();
+    }
+
+    // Function to attach event listeners
+    function attachEventListeners() {
+      // 86ing toggle functionality
+      document.querySelectorAll('.toggle-86:not(.has-listener)').forEach(button => {
+        button.addEventListener('click', function() {
+          const menuItem = this.closest('.menu-item');
+          const itemName = menuItem.querySelector('h3').textContent;
+          const isInactive = menuItem.classList.contains('inactive');
+          const action = isInactive ? 'un-86' : '86';
+          
+          if (!isInactive) {
+            const reason = prompt(`Enter reason to ${action} this item (or click Cancel to abort):`);
+            if (!!reason) {
+              localStorage.setItem(`86reason_${itemName}`, reason);
+              menuItem.classList.add('inactive');
+              this.textContent = 'Un86';
+              const div = document.createElement('div');
+              div.className = 'badges';
+              div.innerHTML = `<div class="badge reason inactive">${reason}</div>`;
+              menuItem.insertBefore(div, menuItem.lastChild);
+              attachEventListeners();
+            }
+          }
+        });
+        button.classList.add('has-listener');
+      });
+
+      // Modified filter functionality for both ingredients and equipment
+      document.querySelectorAll('.ingredient-toggle:not(.has-listener), .equipment-toggle:not(.has-listener)').forEach(button => {
+        button.addEventListener('click', function() {
+          this.classList.toggle('active');
+          updateMenuItemsBasedOnFilters();
+          updateSubmitButtonVisibility();
+        });
+        button.classList.add('has-listener');
+      });
+
+      // Add click event for reason badges
+      document.querySelectorAll('.badge.reason:not(.has-listener)').forEach(badge => {
+        badge.addEventListener('click', function() {
+          const menuItem = this.closest('.menu-item');
+          const itemName = menuItem.querySelector('h3').textContent;
+          const reason = this.textContent;
+          
+          const confirmResolve = confirm(`Do you want to mark the following reason as resolved?\n\n"${reason}"\n\nThis will un-86 the item "${itemName}".`);
+          
+          if (confirmResolve) {
+            // Remove the reason from localStorage
+            localStorage.removeItem(`86reason_${itemName}`);
+            
+            // Remove the reason badge
+            this.parentElement.remove();
+            
+            // Update the menu item status
+            menuItem.classList.remove('inactive');
+            const toggleButton = menuItem.querySelector('.toggle-86');
+            toggleButton.textContent = '86';
+            
+            // Update menu item status
+            updateMenuItemStatus(menuItem);
+          }
+        });
+        badge.classList.add('has-listener');
+      });
+    }
+
+    // New function to update all menu items based on current filter status
+    function updateMenuItemsBasedOnFilters() {
+      const filterStatus = getCurrentFilterStatus();
+      
+      document.querySelectorAll('.menu-item').forEach(item => {
+        const ingredients = item.getAttribute('data-ingredients').split('|');
+        const equipment = item.getAttribute('data-equipment').split('|');
+        ingredients.forEach(ingredient => {
+          const badge = item.querySelector(`.badge[data-ingredient="${ingredient}"]`);
+          if (badge) {
+            badge.classList.toggle('active', filterStatus.ingredients[ingredient]);
+          }
+        });
+
+        equipment.forEach(eq => {
+          const badge = item.querySelector(`.badge[data-equipment="${eq}"]`);
+          if (badge) {
+            badge.classList.toggle('active', filterStatus.equipment[eq]);
+          }
+        });
+        
+        updateMenuItemStatus(item);
+      });
+    }
+
+    // New function to update menu item status
+    function updateMenuItemStatus(menuItem) {
+      const allBadgesActive = Array.from(menuItem.querySelectorAll('.badge'))
+        .every(badge => badge.classList.contains('active'));
+      
+      menuItem.classList.toggle('inactive', !allBadgesActive);
+      const toggleButton = menuItem.querySelector('.toggle-86');
+      toggleButton.classList.toggle('active', !allBadgesActive);
+      toggleButton.textContent = allBadgesActive ? '86' : 'Un86';
+    }
+
+    // Modified function to get initial filter status
+    function getInitialFilterStatus() {
+      const savedStatus = localStorage.getItem('filterStatus');
+      if (savedStatus) {
+        return JSON.parse(savedStatus);
+      } else {
+        const ingredients = {};
+        document.querySelectorAll('.ingredient-toggle').forEach(button => {
+          ingredients[button.getAttribute('data-ingredient')] = true;
+        });
+        const equipment = {};
+        document.querySelectorAll('.equipment-toggle').forEach(button => {
+          equipment[button.getAttribute('data-equipment')] = true;
+        });
+        return {ingredients, equipment};
+      }
+    }
+
+    // Modified function to render ingredient filter
+    function renderIngredientFilter(ingredientCounts) {
+      const filterArea = document.getElementById('ingredient-filter-area');
+      const initialStatus = getInitialFilterStatus()['ingredients'];
+      
+      Object.entries(ingredientCounts).forEach(([ingredient, count]) => {
+        const button = document.createElement('button');
+        button.className = 'ingredient-toggle';
+        button.classList.toggle('active', initialStatus[ingredient] !== false);
+        button.setAttribute('data-ingredient', ingredient);
+        button.innerHTML = `${ingredient} (${count})`;
+        filterArea.insertBefore(button, filterArea.firstChild);
+      });
+
+      updateMenuItemsBasedOnFilters(); // Add this line
+    }
+
+    function renderEquipmentFilter(equipmentCounts) {
+      const filterArea = document.getElementById('equipment-filter-area');
+      const initialStatus = getInitialFilterStatus()['equipment'];
+      Object.entries(equipmentCounts).forEach(([equipment, count]) => {
+        const button = document.createElement('button');
+        button.className = 'equipment-toggle';
+        button.classList.toggle('active', initialStatus[equipment] !== false);
+        button.setAttribute('data-equipment', equipment);
+        button.innerHTML = `${equipment} (${count})`;
+        filterArea.insertBefore(button, filterArea.firstChild);
+      });
+
+      updateMenuItemsBasedOnFilters(); // Add this line
+    }
+
+    // Modified updateSubmitButtonVisibility function
+    function updateSubmitButtonVisibility() {
+      const currentStatus = getCurrentFilterStatus();
+      const initialStatus = getInitialFilterStatus();
+      const submitButton = document.getElementById('submit-button');
+      submitButton.style.display = isFilterStatusChanged(currentStatus, initialStatus) ? 'block' : 'none';
+    }
+
+    // New function to get current filter status
+    function getCurrentFilterStatus() {
+      const ingredients = {};
+      document.querySelectorAll('.ingredient-toggle').forEach(button => {
+        ingredients[button.getAttribute('data-ingredient')] = button.classList.contains('active');
+      });
+      const equipment = {};
+      document.querySelectorAll('.equipment-toggle').forEach(button => {
+        equipment[button.getAttribute('data-equipment')] = button.classList.contains('active');
+      });
+      return {ingredients, equipment};
+    }
+
+    // New function to compare filter status
+    function isFilterStatusChanged(currentStatus, savedStatus) {
+      return JSON.stringify(currentStatus) !== JSON.stringify(savedStatus);
+    }
+
+    // Modify the submit button event listener
+    document.getElementById('submit-button').addEventListener('click', function() {
+      const currentStatus = getCurrentFilterStatus();
+      const initialStatus = getInitialFilterStatus();
+      const difference = getFilterStatusDifference(currentStatus, initialStatus);
+      
+      // Alert the difference
+      alert(JSON.stringify(difference, null, 2));
+
+      // Save the current status and hide the button
+      localStorage.setItem('filterStatus', JSON.stringify(currentStatus));
+      this.style.display = 'none';
+    });
+
+    // Add this new function to calculate the difference
+    function getFilterStatusDifference(currentStatus, initialStatus) {
+      const difference = {
+        ingredients: {},
+        equipment: {}
+      };
+
+      // Check ingredients
+      for (const ing in currentStatus.ingredients) {
+        if (currentStatus.ingredients[ing] !== initialStatus.ingredients[ing]) {
+          difference.ingredients[ing] = currentStatus.ingredients[ing];
+        }
+      }
+
+      // Check equipment
+      for (const eq in currentStatus.equipment) {
+        if (currentStatus.equipment[eq] !== initialStatus.equipment[eq]) {
+          difference.equipment[eq] = currentStatus.equipment[eq];
+        }
+      }
+
+      return difference;
+    }
+
+    // Modify the fetch calls to include loading ingredient counts
+    Promise.all([
+      fetch('menu-items.json').then(response => response.json()),
+      fetch('ingredient-counts.json').then(response => response.json()),
+      fetch('equipment-counts.json').then(response => response.json())
+    ])
+      .then(([menuItems, ingredientCounts, equipmentCounts]) => {
+        renderMenuItems(menuItems);
+        renderIngredientFilter(ingredientCounts);
+        renderEquipmentFilter(equipmentCounts);
+        attachEventListeners();
+        updateSubmitButtonVisibility(); // Add this line
+        setupAdvancedToggle(); // Add this line
+      })
+      .catch(error => console.error('Error loading data:', error));
+
+    // Add this new function at the end of your script
+    function setupAdvancedToggle() {
+      const advancedCheckbox = document.getElementById('advanced-checkbox');
+      advancedCheckbox.addEventListener('change', function() {
+        document.documentElement.classList.toggle('advanced', this.checked);
+      });
+    }
+  </script>
+
+<style>
+  .equipment-toggle {
+    display: none;
+  }
+  .advanced .equipment-toggle {
+    display: block;
+  }
+  .toggle-86 {
+    display: none;
+  }
+  .advanced .toggle-86 {
+    display: block;
+  }
+  .badge.reason {
+    pointer-events: none;
+  }
+  .advanced .badge.reason {
+    pointer-events: auto;
+  }
+  .equipment-toggle {
+    padding: 5px 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 15px;
+    background-color: #ccc;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .equipment-toggle.active {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  .ingredient-toggle {
+    padding: 5px 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 15px;
+    background-color: #ccc;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .ingredient-toggle.active {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  .badge {
+    background-color: #ccc;
+    color: black;
+    pointer-events: none;
+  }
+
+  .badge.active {
+    background-color: #4CAF50;
+    color: white;
+  }
+  .badge.reason.inactive {
+    background-color: #fff;
+    border: 1px solid #ff4136;
+    color: #ff4136;
+    cursor: pointer;
+  }
+
+  .equipment-toggle.active, .equipment.active {
+    background-color:cadetblue;
+    color: white;
+  }
+
+  .submit-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    min-height: 30px;
+  }
+
+  .menu-item {
+    position: relative;
+    overflow: hidden;
+    min-height: 300px;
+  }
+
+  .menu-item.inactive::before {
+    content: "86ed";
+    position: absolute;
+    top: 20px;
+    right: -60px;
+    background-color: #ff4136;
+    color: white;
+    padding: 5px 0;
+    width: 200px;
+    text-align: center;
+    transform: rotate(45deg);
+    z-index: 1;
+  }
+
+  /* Add these new styles for the Advanced toggle */
+  .advanced-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+</style>
+
+</body>
+</html>

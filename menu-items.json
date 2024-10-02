@@ -1,0 +1,50 @@
+[
+    {
+      "name": "Honey Garlic Wings",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/7a54097b-ddc8-4087-8ed4-73159654a8fb-retina-large.jpg",
+      "ingredients": ["chicken", "garlic", "honey"],
+      "equipment": ["fryer"]
+    },
+    {
+      "name": "BBQ Ranch Wings",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/4b31ad3a-485d-4bdb-97a2-6b2f6374297b-retina-large.jpg",
+      "ingredients": ["chicken", "bbq sauce", "ranch"],
+      "equipment": ["fryer"]
+    },
+    {
+      "name": "Spicy Garlic Wings",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/51b0cd7e-acc9-4405-8d7b-5276b0c30831-retina-large.jpg",
+      "ingredients": ["chicken", "spicy sauce", "garlic"],
+      "equipment": ["fryer"]
+    },
+    {
+      "name": "Classic Fries",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/fa8d3d5a-c373-47c2-bf64-9e90156e2a3a-retina-large.jpg",
+      "ingredients": ["potato", "garlic"],
+      "equipment": ["fryer"]
+    },
+    {
+      "name": "Tater Tots",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/b5961eec-590e-43a0-b78c-ce7e8f69d318-retina-large.jpg",
+      "ingredients": ["potato"],
+      "equipment": ["fryer", "i3"]
+    },
+    {
+      "name": "Buffalo Boneless",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/f919720d-b5a4-4ebc-84a2-b6c34f79428e-retina-large.jpg",
+      "ingredients": ["chicken", "spicy sauce", "ranch"],
+      "equipment": ["i3"]
+    },
+    {
+        "name": "Mexican Coke",
+        "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/9f560a4f-f8df-42b3-9e43-65ac1467c4e2-retina-large.jpg",
+        "ingredients": ["mexican coke"],
+        "equipment": []
+    },
+    {
+        "name": "Side Ranch",
+        "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/0a4d9109-b746-4aa8-bdeb-8d0e6c97a5e5-retina-large.jpg",
+        "ingredients": ["ranch"],
+        "equipment": []
+    }
+  ]
