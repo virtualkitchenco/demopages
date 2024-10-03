@@ -75,6 +75,20 @@
     </div>
   </div>
 
+  <!-- Add this updated modal element for equipment -->
+  <div id="equipment-modal" class="modal">
+    <div class="modal-content">
+      <span class="close equipment-close">&times;</span>
+      <h2 id="modal-equipment-name"></h2>
+      <p>Is this equipment available?</p>
+      <div class="modal-buttons">
+        <button id="equipment-cancel-btn" class="cancel-btn">Cancel</button>
+        <button id="equipment-off-btn" class="off-btn">Turn Off</button>
+        <button id="equipment-on-btn" class="on-btn">Turn On</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Function to render menu items
     function renderMenuItems(menuItems) {
@@ -96,7 +110,7 @@
           <img src="${item.image}" alt="${item.name}">
           <h3>${item.name}</h3>
           <div class="badges">
-            ${item.ingredients.map(ing => `<div class="badge ingredient active" data-ingredient="${ing}">${ing}</div>`).join('')}
+            ${item.ingredients.map(ing => `<div class="badge ingredient active clickable" data-ingredient="${ing}">${ing}</div>`).join('')}
           </div>
           <div class="badges">
             ${item.equipment.map(eq => `<div class="badge equipment active" data-equipment="${eq}">${eq}</div>`).join('')}
@@ -190,6 +204,24 @@
           }
         });
         badge.classList.add('has-listener');
+      });
+
+      // Add click event for ingredient badges in menu items
+      document.querySelectorAll('.badge.ingredient.clickable:not(.has-listener)').forEach(badge => {
+        badge.addEventListener('click', function() {
+          const ingredient = this.getAttribute('data-ingredient');
+          showIngredientModal(ingredient);
+        });
+        badge.classList.add('has-listener');
+      });
+
+      // Modified filter functionality for equipment
+      document.querySelectorAll('.equipment-toggle:not(.has-listener), .badge.equipment:not(.has-listener)').forEach(element => {
+        element.addEventListener('click', function() {
+          const equipment = this.getAttribute('data-equipment');
+          showEquipmentModal(equipment);
+        });
+        element.classList.add('has-listener');
       });
     }
 
@@ -539,6 +571,74 @@
         }
       }
     }
+
+    // Add this new function to show the ingredient modal
+    function showIngredientModal(ingredient) {
+      const modal = document.getElementById('ingredient-modal');
+      const ingredientCounts = JSON.parse(localStorage.getItem('ingredientCounts')) || {};
+      const count = ingredientCounts[ingredient] || 0;
+
+      document.getElementById('modal-ingredient-name').textContent = ingredient;
+      document.getElementById('on-hand-count').value = count;
+      document.getElementById('wasted-count').value = 0;
+      document.getElementById('received-count').value = 0;
+
+      modal.style.display = 'block';
+    }
+
+    // Update this function to show the equipment modal
+    function showEquipmentModal(equipment) {
+      const modal = document.getElementById('equipment-modal');
+      const equipmentName = document.getElementById('modal-equipment-name');
+      const cancelBtn = document.getElementById('equipment-cancel-btn');
+      const offBtn = document.getElementById('equipment-off-btn');
+      const onBtn = document.getElementById('equipment-on-btn');
+      const closeBtn = modal.querySelector('.equipment-close');
+
+      equipmentName.textContent = equipment;
+      modal.style.display = 'block';
+
+      cancelBtn.onclick = function() {
+        modal.style.display = 'none';
+      }
+
+      offBtn.onclick = function() {
+        updateEquipmentStatus(equipment, false);
+        modal.style.display = 'none';
+      }
+
+      onBtn.onclick = function() {
+        updateEquipmentStatus(equipment, true);
+        modal.style.display = 'none';
+      }
+
+      closeBtn.onclick = function() {
+        modal.style.display = 'none';
+      }
+
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = 'none';
+        }
+      }
+    }
+
+    // Add this new function to update equipment status
+    function updateEquipmentStatus(equipment, isActive) {
+      const equipmentToggle = document.querySelector(`.equipment-toggle[data-equipment="${equipment}"]`);
+      const equipmentBadges = document.querySelectorAll(`.badge.equipment[data-equipment="${equipment}"]`);
+
+      if (equipmentToggle) {
+        equipmentToggle.classList.toggle('active', isActive);
+      }
+
+      equipmentBadges.forEach(badge => {
+        badge.classList.toggle('active', isActive);
+      });
+
+      updateMenuItemsBasedOnFilters();
+      updateSubmitButtonVisibility();
+    }
   </script>
 
 <style>
@@ -592,7 +692,6 @@
   .badge {
     background-color: #ccc;
     color: black;
-    pointer-events: none;
   }
 
   .badge.active {
