@@ -316,6 +316,8 @@
       const currentStatus = getCurrentFilterStatus();
       const initialStatus = getInitialFilterStatus();
       const submitButton = document.getElementById('submit-button');
+      console.log(JSON.stringify(currentStatus));
+      console.log(JSON.stringify(initialStatus));
       submitButton.style.display = isFilterStatusChanged(currentStatus, initialStatus) ? 'block' : 'none';
     }
 
@@ -420,7 +422,7 @@
           renderIngredientFilter(ingredientCounts);
           renderEquipmentFilter(equipmentCounts);
           attachEventListeners();
-          updateSubmitButtonVisibility();
+          // updateSubmitButtonVisibility();
           setupAdvancedToggle();
           setupSidebarFunctionality(ingredientCounts);
         } else {
@@ -750,6 +752,7 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+    display: none;
   }
 
   .badges {
