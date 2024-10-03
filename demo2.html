@@ -7,20 +7,6 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Add the sidebar -->
-  <div id="sidebar" class="sidebar">
-    <div class="sidebar-header">
-      <input type="text" id="ingredient-search" placeholder="Search ingredients...">
-      <div class="sort-buttons">
-        <button id="sort-name" class="sort-button">Name ▲</button>
-        <button id="sort-count" class="sort-button">Count ▼</button>
-      </div>
-    </div>
-    <div id="ingredient-list" class="ingredient-list">
-      <!-- Ingredients will be dynamically inserted here -->
-    </div>
-  </div>
-
   <!-- Add the Advanced toggle button -->
   <div id="advanced-toggle" class="advanced-toggle">
     <label class="switch">
@@ -50,31 +36,6 @@
     <button id="submit-button" class="submit-button" style="display: none;">Submit</button>
   </div>
 
-  <!-- Add this updated modal element -->
-  <div id="ingredient-modal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2 id="modal-ingredient-name"></h2>
-      <div class="count-input">
-        <label for="on-hand-count">On-Hand Count:</label>
-        <input type="number" id="on-hand-count" min="0">
-        <button id="out-of-stock-btn" class="out-of-stock-btn">Out of Stock</button>
-      </div>
-      <div class="count-input">
-        <label for="wasted-count">Wasted Count:</label>
-        <input type="number" id="wasted-count" min="0">
-      </div>
-      <div class="count-input">
-        <label for="received-count">Received Count:</label>
-        <input type="number" id="received-count" min="0">
-      </div>
-      <div class="modal-buttons">
-        <button id="cancel-btn" class="cancel-btn">Cancel</button>
-        <button id="save-btn" class="save-btn">Save</button>
-      </div>
-    </div>
-  </div>
-
   <script>
     // Function to render menu items
     function renderMenuItems(menuItems) {
@@ -87,7 +48,7 @@
         menuItemElement.setAttribute('data-ingredients', item.ingredients.join('|'));
         menuItemElement.setAttribute('data-equipment', item.equipment.join('|'));
 
-        const eightySixReason = getInitialFilterStatus().reason86[item.name];
+        const eightySixReason = localStorage.getItem(`86reason_${item.name}`);
         if (eightySixReason) {
           menuItemElement.classList.add('inactive');
         }
@@ -125,9 +86,7 @@
           if (!isInactive) {
             const reason = prompt(`Enter reason to ${action} this item (or click Cancel to abort):`);
             if (!!reason) {
-              const currentStatus = getCurrentFilterStatus();
-              currentStatus['reason86'][itemName] = reason;
-              
+              localStorage.setItem(`86reason_${itemName}`, reason);
               menuItem.classList.add('inactive');
               this.textContent = 'Un86';
               const div = document.createElement('div');
@@ -135,19 +94,7 @@
               div.innerHTML = `<div class="badge reason inactive">${reason}</div>`;
               menuItem.insertBefore(div, menuItem.lastChild);
               attachEventListeners();
-              updateSubmitButtonVisibility();
-              document.getElementById('submit-button').click();
-              localStorage.setItem('filterStatus', JSON.stringify(currentStatus));
             }
-          } else {
-            const currentStatus = getCurrentFilterStatus();
-            delete currentStatus['reason86'][itemName];
-            localStorage.setItem('filterStatus', JSON.stringify(currentStatus));
-            
-            menuItem.classList.remove('inactive');
-            this.textContent = '86';
-            menuItem.querySelector('.badge.reason').parentElement.remove();
-            updateSubmitButtonVisibility();
           }
         });
         button.classList.add('has-listener');
@@ -186,7 +133,6 @@
             
             // Update menu item status
             updateMenuItemStatus(menuItem);
-            document.getElementById('submit-button').click();
           }
         });
         badge.classList.add('has-listener');
@@ -243,7 +189,7 @@
         document.querySelectorAll('.equipment-toggle').forEach(button => {
           equipment[button.getAttribute('data-equipment')] = true;
         });
-        return {ingredients, equipment, 'reason86': {}};
+        return {ingredients, equipment};
       }
     }
 
@@ -288,7 +234,6 @@
     }
 
     // New function to get current filter status
-    const reason86 = {};
     function getCurrentFilterStatus() {
       const ingredients = {};
       document.querySelectorAll('.ingredient-toggle').forEach(button => {
@@ -298,10 +243,10 @@
       document.querySelectorAll('.equipment-toggle').forEach(button => {
         equipment[button.getAttribute('data-equipment')] = button.classList.contains('active');
       });
-      return {ingredients, equipment, reason86};
+      return {ingredients, equipment};
     }
 
-    // New function to compare filter statussu
+    // New function to compare filter status
     function isFilterStatusChanged(currentStatus, savedStatus) {
       return JSON.stringify(currentStatus) !== JSON.stringify(savedStatus);
     }
@@ -311,31 +256,9 @@
       const currentStatus = getCurrentFilterStatus();
       const initialStatus = getInitialFilterStatus();
       const difference = getFilterStatusDifference(currentStatus, initialStatus);
-      console.log(difference);
+      
       // Alert the difference
-      Object.entries(difference.ingredients).forEach(([ingredient, value]) => {
-        if (!value) {
-          console.log(`fire an exception on ${ingredient}`);
-        } else {
-          console.log(`remove an exception on ${ingredient}`);
-        }
-      });
-      Object.entries(difference.equipment).forEach(([equipment, value]) => {
-        if (!value) {
-          console.log(`fire an exception on ${equipment}`);
-        } else {
-          console.log(`remove an exception on ${equipment}`);
-        }
-      });
-      Object.entries(difference.reason86).forEach(([item, reason]) => {
-        console.log(item, reason);
-        if (reason) {
-          console.log(`fire an exception on ${item} because ${reason}`);
-        } else {
-          console.log(`remove an exception on ${item}`);
-        }
-      });
-      console.log(difference);
+      alert(JSON.stringify(difference, null, 2));
 
       // Save the current status and hide the button
       localStorage.setItem('filterStatus', JSON.stringify(currentStatus));
@@ -346,8 +269,7 @@
     function getFilterStatusDifference(currentStatus, initialStatus) {
       const difference = {
         ingredients: {},
-        equipment: {},
-        reason86: {}
+        equipment: {}
       };
 
       // Check ingredients
@@ -361,12 +283,6 @@
       for (const eq in currentStatus.equipment) {
         if (currentStatus.equipment[eq] !== initialStatus.equipment[eq]) {
           difference.equipment[eq] = currentStatus.equipment[eq];
-        }
-      }
-
-      for (const item in currentStatus.reason86) {
-        if (currentStatus.reason86[item] !== initialStatus.reason86[item]) {
-          difference.reason86[item] = currentStatus.reason86[item];
         }
       }
 
@@ -386,7 +302,6 @@
         attachEventListeners();
         updateSubmitButtonVisibility(); // Add this line
         setupAdvancedToggle(); // Add this line
-        setupSidebarFunctionality(); // Add this line
       })
       .catch(error => console.error('Error loading data:', error));
 
@@ -396,148 +311,6 @@
       advancedCheckbox.addEventListener('change', function() {
         document.documentElement.classList.toggle('advanced', this.checked);
       });
-    }
-
-    // Add these new functions for the sidebar functionality
-    function renderSidebar(ingredientCounts) {
-      const ingredientList = document.getElementById('ingredient-list');
-      ingredientList.innerHTML = '';
-
-      Object.entries(ingredientCounts).forEach(([ingredient, count]) => {
-        const listItem = document.createElement('div');
-        listItem.className = 'ingredient-item';
-        listItem.innerHTML = `${ingredient} (${count})`;
-        if (count === 0) {
-          listItem.classList.add('out-of-stock');
-        }
-        ingredientList.appendChild(listItem);
-      });
-    }
-
-    function setupSidebarFunctionality() {
-      const searchInput = document.getElementById('ingredient-search');
-      const sortNameBtn = document.getElementById('sort-name');
-      const sortCountBtn = document.getElementById('sort-count');
-      let ingredientCounts = {};
-      let sortNameAsc = true;
-      let sortCountAsc = false;
-
-      // Search functionality
-      searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const filteredIngredients = Object.fromEntries(
-          Object.entries(ingredientCounts).filter(([ingredient]) => 
-            ingredient.toLowerCase().includes(searchTerm)
-          )
-        );
-        renderSidebar(filteredIngredients);
-      });
-
-      // Sorting functionality
-      sortNameBtn.addEventListener('click', function() {
-        const sortedIngredients = Object.fromEntries(
-          Object.entries(ingredientCounts).sort((a, b) => {
-            return sortNameAsc ? a[0].localeCompare(b[0]) : b[0].localeCompare(a[0]);
-          })
-        );
-        renderSidebar(sortedIngredients);
-        sortNameAsc = !sortNameAsc;
-        updateSortButtonText(this, 'Name', sortNameAsc);
-      });
-
-      sortCountBtn.addEventListener('click', function() {
-        const sortedIngredients = Object.fromEntries(
-          Object.entries(ingredientCounts).sort((a, b) => {
-            return sortCountAsc ? a[1] - b[1] : b[1] - a[1];
-          })
-        );
-        renderSidebar(sortedIngredients);
-        sortCountAsc = !sortCountAsc;
-        updateSortButtonText(this, 'Count', sortCountAsc);
-      });
-
-      // Store the original ingredient counts
-      fetch('ingredient-counts.json')
-        .then(response => response.json())
-        .then(data => {
-          ingredientCounts = data;
-          renderSidebar(ingredientCounts);
-          setupIngredientModal(ingredientCounts); // Pass ingredientCounts to setupIngredientModal
-        });
-    }
-
-    function updateSortButtonText(button, type, isAsc) {
-      button.textContent = `${type} ${isAsc ? '▲' : '▼'}`;
-    }
-
-    // Add this new function
-    function setupIngredientModal(ingredientCounts) {
-      const modal = document.getElementById('ingredient-modal');
-      const closeBtn = modal.querySelector('.close');
-      const outOfStockBtn = document.getElementById('out-of-stock-btn');
-      const onHandInput = document.getElementById('on-hand-count');
-      const wastedInput = document.getElementById('wasted-count');
-      const receivedInput = document.getElementById('received-count');
-      const cancelBtn = document.getElementById('cancel-btn');
-      const saveBtn = document.getElementById('save-btn');
-      let currentIngredient = '';
-      let originalCount = 0;
-
-      document.getElementById('ingredient-list').addEventListener('click', function(e) {
-        if (e.target.classList.contains('ingredient-item')) {
-          currentIngredient = e.target.textContent.split(' (')[0];
-          originalCount = ingredientCounts[currentIngredient];
-          
-          document.getElementById('modal-ingredient-name').textContent = currentIngredient;
-          onHandInput.value = originalCount;
-          wastedInput.value = 0;
-          receivedInput.value = 0;
-          
-          modal.style.display = 'block';
-        }
-      });
-
-      closeBtn.onclick = function() {
-        modal.style.display = 'none';
-      }
-
-      window.onclick = function(event) {
-        if (event.target == modal) {
-          modal.style.display = 'none';
-        }
-      }
-
-      outOfStockBtn.onclick = function() {
-        onHandInput.value = 0;
-      }
-
-      cancelBtn.onclick = function() {
-        modal.style.display = 'none';
-      }
-
-      saveBtn.onclick = function() {
-        const newCount = parseInt(onHandInput.value);
-        ingredientCounts[currentIngredient] = newCount;
-        localStorage.setItem('ingredientCounts', JSON.stringify(ingredientCounts));
-        updateIngredientStatus(currentIngredient, newCount);
-        renderSidebar(ingredientCounts);
-        updateMenuItemsBasedOnFilters();
-        modal.style.display = 'none';
-        
-        // Trigger submit button click
-        document.getElementById('submit-button').click();
-      }
-    }
-
-    function updateIngredientStatus(ingredient, count) {
-      const filterButton = document.querySelector(`.ingredient-toggle[data-ingredient="${ingredient}"]`);
-      if (filterButton) {
-        if (count === 0) {
-          filterButton.classList.remove('active');
-        } else {
-          filterButton.classList.add('active');
-        }
-      }
     }
   </script>
 
@@ -718,231 +491,6 @@
 
   .slider.round:before {
     border-radius: 50%;
-  }
-
-  /* Add these new styles for the sidebar */
-  .sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 250px;
-    background-color: #f1f1f1;
-    padding: 20px;
-    overflow-y: auto;
-  }
-
-  /* Modify these styles for the sidebar header and sort buttons */
-  .sidebar-header {
-    margin-bottom: 20px;
-  }
-
-  #ingredient-search {
-    width: 100%;
-    padding: 5px;
-    margin-bottom: 10px;
-  }
-
-  .sort-buttons {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .sort-button {
-    padding: 5px 10px;
-    cursor: pointer;
-    flex: 1;
-    margin-right: 5px;
-  }
-
-  .sort-button:last-child {
-    margin-right: 0;
-  }
-
-  .ingredient-list {
-    max-height: calc(100% - 100px);
-    overflow-y: auto;
-  }
-
-  .ingredient-item {
-    padding: 5px 0;
-    border-bottom: 1px solid #ddd;
-  }
-
-  /* Adjust the container to make room for the sidebar */
-  .container {
-    margin-left: 270px;
-  }
-
-  #ingredient-filter-area {
-    display: none;
-  }
-  #equipment-filter-area {
-    min-height: 30px;
-  }
-
-  /* Add these new styles for the modal */
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-  }
-
-  .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 300px;
-    border-radius: 5px;
-  }
-
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-  .count-input {
-    margin-bottom: 10px;
-  }
-
-  .count-input label {
-    display: inline-block;
-    width: 120px;
-  }
-
-  .count-input input {
-    width: 60px;
-  }
-
-  .out-of-stock-btn {
-    background-color: #ff4136;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 10px;
-    height: 28px; /* Match the height of the input */
-    font-size: 10px;
-  }
-
-  .ingredient-item {
-    cursor: pointer;
-  }
-
-  .ingredient-item:hover {
-    background-color: #e0e0e0;
-  }
-
-  .modal-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-
-  .cancel-btn, .save-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-
-  .cancel-btn {
-    background-color: #ccc;
-  }
-
-  .save-btn {
-    background-color: #4CAF50;
-    color: white;
-  }
-
-  .out-of-stock-btn {
-    background-color: #ff4136;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 10px;
-    height: 28px; /* Match the height of the input */
-  }
-
-  .count-input {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-
-  .count-input label {
-    flex: 0 0 120px;
-  }
-
-  .count-input input {
-    width: 60px;
-    margin-right: 10px;
-  }
-
-  /* Update the out-of-stock button style */
-  .out-of-stock-btn {
-    background-color: #ff4136;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 10px;
-    height: 28px; /* Match the height of the input */
-  }
-
-  /* Add styles for the 86ed ribbon on inactive badges */
-  .badge {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .badge:not(.active)::after {
-    content: "Out";
-    position: absolute;
-    top: 2px;
-    right: -18px;
-    background-color: #ff4136;
-    color: white;
-    font-size: 8px;
-    padding: 1px 20px;
-    transform: rotate(45deg);
-  }
-
-  /* Ensure the badge size doesn't change */
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 60px;
-    height: 24px;
-    padding: 0 8px;
-    box-sizing: border-box;
-  }
-
-  /* Add this new style for out-of-stock ingredients */
-  .ingredient-item.out-of-stock {
-    color: red;
   }
 </style>
 
