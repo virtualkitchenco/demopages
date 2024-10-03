@@ -287,7 +287,7 @@
       Object.entries(ingredientCounts).forEach(([ingredient, count]) => {
         const button = document.createElement('button');
         button.className = 'ingredient-toggle';
-        button.classList.toggle('active', initialStatus[ingredient] !== false);
+        button.classList.toggle('active', count > 0);
         button.setAttribute('data-ingredient', ingredient);
         button.innerHTML = `${ingredient} (${count})`;
         filterArea.insertBefore(button, filterArea.firstChild);
@@ -408,17 +408,36 @@
     // Modify the fetch calls to include loading ingredient counts
     Promise.all([
       fetch('menu-items.json').then(response => response.json()),
-      fetch('ingredient-counts.json').then(response => response.json()),
       fetch('equipment-counts.json').then(response => response.json())
     ])
-      .then(([menuItems, ingredientCounts, equipmentCounts]) => {
-        renderMenuItems(menuItems);
-        renderIngredientFilter(ingredientCounts);
-        renderEquipmentFilter(equipmentCounts);
-        attachEventListeners();
-        updateSubmitButtonVisibility(); // Add this line
-        setupAdvancedToggle(); // Add this line
-        setupSidebarFunctionality(); // Add this line
+      .then(([menuItems, equipmentCounts]) => {
+        // Load ingredientCounts from localStorage or fetch from JSON
+        let ingredientCounts;
+        const storedIngredientCounts = localStorage.getItem('ingredientCounts');
+        if (storedIngredientCounts) {
+          ingredientCounts = JSON.parse(storedIngredientCounts);
+          renderMenuItems(menuItems);
+          renderIngredientFilter(ingredientCounts);
+          renderEquipmentFilter(equipmentCounts);
+          attachEventListeners();
+          updateSubmitButtonVisibility();
+          setupAdvancedToggle();
+          setupSidebarFunctionality(ingredientCounts);
+        } else {
+          fetch('ingredient-counts.json')
+            .then(response => response.json())
+            .then(fetchedIngredientCounts => {
+              ingredientCounts = fetchedIngredientCounts;
+              localStorage.setItem('ingredientCounts', JSON.stringify(ingredientCounts));
+              renderMenuItems(menuItems);
+              renderIngredientFilter(ingredientCounts);
+              renderEquipmentFilter(equipmentCounts);
+              attachEventListeners();
+              updateSubmitButtonVisibility();
+              setupAdvancedToggle();
+              setupSidebarFunctionality(ingredientCounts);
+            });
+        }
       })
       .catch(error => console.error('Error loading data:', error));
 
@@ -446,11 +465,11 @@
       });
     }
 
-    function setupSidebarFunctionality() {
+    function setupSidebarFunctionality(initialIngredientCounts) {
       const searchInput = document.getElementById('ingredient-search');
       const sortNameBtn = document.getElementById('sort-name');
       const sortCountBtn = document.getElementById('sort-count');
-      let ingredientCounts = {};
+      let ingredientCounts = initialIngredientCounts;
       let sortNameAsc = true;
       let sortCountAsc = false;
 
@@ -488,14 +507,9 @@
         updateSortButtonText(this, 'Count', sortCountAsc);
       });
 
-      // Store the original ingredient counts
-      fetch('ingredient-counts.json')
-        .then(response => response.json())
-        .then(data => {
-          ingredientCounts = data;
-          renderSidebar(ingredientCounts);
-          setupIngredientModal(ingredientCounts); // Pass ingredientCounts to setupIngredientModal
-        });
+      // Remove the fetch call for ingredient-counts.json
+      renderSidebar(ingredientCounts);
+      setupIngredientModal(ingredientCounts);
     }
 
     function updateSortButtonText(button, type, isAsc) {
@@ -503,7 +517,7 @@
     }
 
     // Add this new function
-    function setupIngredientModal(ingredientCounts) {
+    function setupIngredientModal(initialIngredientCounts) {
       const modal = document.getElementById('ingredient-modal');
       const closeBtn = modal.querySelector('.close');
       const outOfStockBtn = document.getElementById('out-of-stock-btn');
@@ -514,11 +528,12 @@
       const saveBtn = document.getElementById('save-btn');
       let currentIngredient = '';
       let originalCount = 0;
+      let ingredientCounts = initialIngredientCounts;
 
       document.getElementById('ingredient-list').addEventListener('click', function(e) {
         if (e.target.classList.contains('ingredient-item')) {
           currentIngredient = e.target.textContent.split(' (')[0];
-          originalCount = ingredientCounts[currentIngredient];
+          originalCount = ingredientCounts[currentIngredient] || 0;
           
           document.getElementById('modal-ingredient-name').textContent = currentIngredient;
           onHandInput.value = originalCount;
@@ -548,16 +563,25 @@
       }
 
       saveBtn.onclick = function() {
-        const newCount = parseInt(onHandInput.value);
-        ingredientCounts[currentIngredient] = newCount;
-        localStorage.setItem('ingredientCounts', JSON.stringify(ingredientCounts));
-        updateIngredientStatus(currentIngredient, newCount);
-        renderSidebar(ingredientCounts);
-        updateMenuItemsBasedOnFilters();
-        modal.style.display = 'none';
-        
-        // Trigger submit button click
-        document.getElementById('submit-button').click();
+        const onHandInput = document.getElementById('on-hand-count');
+        const newCount = parseInt(onHandInput.value) || 0;
+        currentIngredient = document.getElementById('modal-ingredient-name').textContent;
+        if (currentIngredient && currentIngredient !== "") {
+          // Update the ingredientCounts object
+          ingredientCounts[currentIngredient] = newCount;
+          
+          // Save to localStorage
+          localStorage.setItem('ingredientCounts', JSON.stringify(ingredientCounts));
+          
+          console.log(`Saved ${currentIngredient}: ${newCount}`); // Debugging log
+          
+          updateIngredientStatus(currentIngredient, newCount);
+          renderSidebar(ingredientCounts);
+          updateMenuItemsBasedOnFilters();
+          modal.style.display = 'none';
+        } else {
+          console.error("Invalid ingredient name:", currentIngredient);
+        }
       }
     }
 
@@ -583,6 +607,9 @@
       document.getElementById('wasted-count').value = 0;
       document.getElementById('received-count').value = 0;
 
+      // Set the currentIngredient for the entire modal
+      modal.dataset.currentIngredient = ingredient;
+
       modal.style.display = 'block';
     }
 
@@ -605,11 +632,13 @@
       offBtn.onclick = function() {
         updateEquipmentStatus(equipment, false);
         modal.style.display = 'none';
+        document.getElementById('submit-button').click();
       }
 
       onBtn.onclick = function() {
         updateEquipmentStatus(equipment, true);
         modal.style.display = 'none';
+        document.getElementById('submit-button').click();
       }
 
       closeBtn.onclick = function() {
