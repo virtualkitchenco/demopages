@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu 86ing Tool</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Add the sidebar -->
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <input type="text" id="ingredient-search" placeholder="Search ingredients...">
+      <div class="sort-buttons">
+        <button id="sort-name" class="sort-button">Name ▲</button>
+        <button id="sort-count" class="sort-button">Count ▼</button>
+      </div>
+    </div>
+    <div id="ingredient-list" class="ingredient-list">
+      <!-- Ingredients will be dynamically inserted here -->
+    </div>
+  </div>
+
+  <!-- Add the Advanced toggle button -->
+  <div id="advanced-toggle" class="advanced-toggle">
+    <label class="switch">
+      <input type="checkbox" id="advanced-checkbox">
+      <span class="slider round"></span>
+    </label>
+    <span>Advanced</span>
+  </div>
+
+  <div class="container">
+    <!-- Ingredient Filter Area -->
+    <div id="ingredient-filter-area" class="filter-area">
+      <!-- Ingredient badges will be dynamically inserted here -->
+    </div>
+
+    <!-- Equipment Filter Area -->
+    <div id="equipment-filter-area" class="filter-area">
+      <!-- Equipment badges will be dynamically inserted here -->
+    </div>
+
+    <!-- Menu Grid -->
+    <div id="menu-grid" class="menu-grid">
+      <!-- Menu items will be dynamically inserted here -->
+    </div>
+
+    <!-- Add Submit button -->
+    <button id="submit-button" class="submit-button" style="display: none;">Submit</button>
+  </div>
+
+  <!-- Add this updated modal element -->
+  <div id="ingredient-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modal-ingredient-name"></h2>
+      <div class="count-input">
+        <label for="on-hand-count">On-Hand Count:</label>
+        <input type="number" id="on-hand-count" min="0">
+        <button id="out-of-stock-btn" class="out-of-stock-btn">Out of Stock</button>
+      </div>
+      <div class="count-input">
+        <label for="wasted-count">Wasted Count:</label>
+        <input type="number" id="wasted-count" min="0">
+      </div>
+      <div class="count-input">
+        <label for="received-count">Received Count:</label>
+        <input type="number" id="received-count" min="0">
+      </div>
+      <div class="modal-buttons">
+        <button id="cancel-btn" class="cancel-btn">Cancel</button>
+        <button id="save-btn" class="save-btn">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add this updated modal element for equipment -->
+  <div id="equipment-modal" class="modal">
+    <div class="modal-content">
+      <span class="close equipment-close">&times;</span>
+      <h2 id="modal-equipment-name"></h2>
+      <p>Is this equipment available?</p>
+      <div class="modal-buttons">
+        <button id="equipment-cancel-btn" class="cancel-btn">Cancel</button>
+        <button id="equipment-off-btn" class="off-btn">Turn Off</button>
+        <button id="equipment-on-btn" class="on-btn">Turn On</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Function to render menu items
+    function renderMenuItems(menuItems) {
+      const menuGrid = document.getElementById('menu-grid');
+      menuGrid.innerHTML = '';
+
+      menuItems.forEach(item => {
+        const menuItemElement = document.createElement('div');
+        menuItemElement.className = 'menu-item';
+        menuItemElement.setAttribute('data-ingredients', item.ingredients.join('|'));
+        menuItemElement.setAttribute('data-equipment', item.equipment.join('|'));
+
+        const eightySixReason = getInitialFilterStatus().reason86[item.name];
+        if (eightySixReason) {
+          menuItemElement.classList.add('inactive');
+        }
+
+        menuItemElement.innerHTML = `
+          <img src="${item.image}" alt="${item.name}">
+          <h3>${item.name}</h3>
+          <div class="badges">
+            ${item.ingredients.map(ing => `<div class="badge ingredient active clickable" data-ingredient="${ing}">${ing}</div>`).join('')}
+          </div>
+          <div class="badges">
+            ${item.equipment.map(eq => `<div class="badge equipment active" data-equipment="${eq}">${eq}</div>`).join('')}
+          </div>
+          ${eightySixReason ? `<div class="badges"><div class="badge reason inactive">${eightySixReason}</div></div>` : ''}
+          <button class="toggle-86">${eightySixReason ? 'Un86' : '86'}</button>
+        `;
+
+        menuGrid.appendChild(menuItemElement);
+      });
+
+      // Attach event listeners after rendering
+      attachEventListeners();
+    }
+
+    // Function to attach event listeners
+    function attachEventListeners() {
+      // 86ing toggle functionality
+      document.querySelectorAll('.toggle-86:not(.has-listener)').forEach(button => {
+        button.addEventListener('click', function() {
+          const menuItem = this.closest('.menu-item');
+          const itemName = menuItem.querySelector('h3').textContent;
+          const isInactive = menuItem.classList.contains('inactive');
+          const action = isInactive ? 'un-86' : '86';
+          
+          if (!isInactive) {
+            const reason = prompt(`Enter reason to ${action} this item (or click Cancel to abort):`);
+            if (!!reason) {
+              const currentStatus = getCurrentFilterStatus();
+              currentStatus['reason86'][itemName] = reason;
+              
+              menuItem.classList.add('inactive');
+              this.textContent = 'Un86';
+              const div = document.createElement('div');
+              div.className = 'badges';
+              div.innerHTML = `<div class="badge reason inactive">${reason}</div>`;
+              menuItem.insertBefore(div, menuItem.lastChild);
+              attachEventListeners();
+              updateSubmitButtonVisibility();
+              document.getElementById('submit-button').click();
+              localStorage.setItem('filterStatus', JSON.stringify(currentStatus));
+            }
+          } else {
+            const currentStatus = getCurrentFilterStatus();
+            delete currentStatus['reason86'][itemName];
+            localStorage.setItem('filterStatus', JSON.stringify(currentStatus));
+            
+            menuItem.classList.remove('inactive');
+            this.textContent = '86';
+            menuItem.querySelector('.badge.reason').parentElement.remove();
+            updateSubmitButtonVisibility();
+          }
+        });
+        button.classList.add('has-listener');
+      });
+
+      // Modified filter functionality for both ingredients and equipment
+      document.querySelectorAll('.ingredient-toggle:not(.has-listener), .equipment-toggle:not(.has-listener)').forEach(button => {
+        button.addEventListener('click', function() {
+          this.classList.toggle('active');
+          updateMenuItemsBasedOnFilters();
+          updateSubmitButtonVisibility();
+        });
+        button.classList.add('has-listener');
+      });
+
+      // Add click event for reason badges
+      document.querySelectorAll('.badge.reason:not(.has-listener)').forEach(badge => {
+        badge.addEventListener('click', function() {
+          const menuItem = this.closest('.menu-item');
+          const itemName = menuItem.querySelector('h3').textContent;
+          const reason = this.textContent;
+          
+          const confirmResolve = confirm(`Do you want to mark the following reason as resolved?\n\n"${reason}"\n\nThis will un-86 the item "${itemName}".`);
+          
+          if (confirmResolve) {
+            // Remove the reason from localStorage
+            localStorage.removeItem(`86reason_${itemName}`);
+            
+            // Remove the reason badge
+            this.parentElement.remove();
+            
+            // Update the menu item status
+            menuItem.classList.remove('inactive');
+            const toggleButton = menuItem.querySelector('.toggle-86');
+            toggleButton.textContent = '86';
+            
+            // Update menu item status
+            updateMenuItemStatus(menuItem);
+            document.getElementById('submit-button').click();
+          }
+        });
+        badge.classList.add('has-listener');
+      });
+
+      // Add click event for ingredient badges in menu items
+      document.querySelectorAll('.badge.ingredient.clickable:not(.has-listener)').forEach(badge => {
+        badge.addEventListener('click', function() {
+          const ingredient = this.getAttribute('data-ingredient');
+          showIngredientModal(ingredient);
+        });
+        badge.classList.add('has-listener');
+      });
+
+      // Modified filter functionality for equipment
+      document.querySelectorAll('.equipment-toggle:not(.has-listener), .badge.equipment:not(.has-listener)').forEach(element => {
+        element.addEventListener('click', function() {
+          const equipment = this.getAttribute('data-equipment');
+          showEquipmentModal(equipment);
+        });
+        element.classList.add('has-listener');
+      });
+    }
+
+    // New function to update all menu items based on current filter status
+    function updateMenuItemsBasedOnFilters() {
+      const filterStatus = getCurrentFilterStatus();
+      
+      document.querySelectorAll('.menu-item').forEach(item => {
+        const ingredients = item.getAttribute('data-ingredients').split('|');
+        const equipment = item.getAttribute('data-equipment').split('|');
+        ingredients.forEach(ingredient => {
+          const badge = item.querySelector(`.badge[data-ingredient="${ingredient}"]`);
+          if (badge) {
+            badge.classList.toggle('active', filterStatus.ingredients[ingredient]);
+          }
+        });
+
+        equipment.forEach(eq => {
+          const badge = item.querySelector(`.badge[data-equipment="${eq}"]`);
+          if (badge) {
+            badge.classList.toggle('active', filterStatus.equipment[eq]);
+          }
+        });
+        
+        updateMenuItemStatus(item);
+      });
+    }
+
+    // New function to update menu item status
+    function updateMenuItemStatus(menuItem) {
+      const allBadgesActive = Array.from(menuItem.querySelectorAll('.badge'))
+        .every(badge => badge.classList.contains('active'));
+      
+      menuItem.classList.toggle('inactive', !allBadgesActive);
+      const toggleButton = menuItem.querySelector('.toggle-86');
+      toggleButton.classList.toggle('active', !allBadgesActive);
+      toggleButton.textContent = allBadgesActive ? '86' : 'Un86';
+    }
+
+    // Modified function to get initial filter status
+    function getInitialFilterStatus() {
+      const savedStatus = localStorage.getItem('filterStatus');
+      if (savedStatus) {
+        return JSON.parse(savedStatus);
+      } else {
+        const ingredients = {};
+        document.querySelectorAll('.ingredient-toggle').forEach(button => {
+          ingredients[button.getAttribute('data-ingredient')] = true;
+        });
+        const equipment = {};
+        document.querySelectorAll('.equipment-toggle').forEach(button => {
+          equipment[button.getAttribute('data-equipment')] = true;
+        });
+        return {ingredients, equipment, 'reason86': {}};
+      }
+    }
+
+    // Modified function to render ingredient filter
+    function renderIngredientFilter(ingredientCounts) {
+      const filterArea = document.getElementById('ingredient-filter-area');
+      const initialStatus = getInitialFilterStatus()['ingredients'];
+      
+      Object.entries(ingredientCounts).forEach(([ingredient, count]) => {
+        const button = document.createElement('button');
+        button.className = 'ingredient-toggle';
+        button.classList.toggle('active', count > 0);
+        button.setAttribute('data-ingredient', ingredient);
+        button.innerHTML = `${ingredient} (${count})`;
+        filterArea.insertBefore(button, filterArea.firstChild);
+      });
+
+      updateMenuItemsBasedOnFilters(); // Add this line
+    }
+
+    function renderEquipmentFilter(equipmentCounts) {
+      const filterArea = document.getElementById('equipment-filter-area');
+      const initialStatus = getInitialFilterStatus()['equipment'];
+      Object.entries(equipmentCounts).forEach(([equipment, count]) => {
+        const button = document.createElement('button');
+        button.className = 'equipment-toggle';
+        button.classList.toggle('active', initialStatus[equipment] !== false);
+        button.setAttribute('data-equipment', equipment);
+        button.innerHTML = `${equipment} (${count})`;
+        filterArea.insertBefore(button, filterArea.firstChild);
+      });
+
+      updateMenuItemsBasedOnFilters(); // Add this line
+    }
+
+    // Modified updateSubmitButtonVisibility function
+    function updateSubmitButtonVisibility() {
+      const currentStatus = getCurrentFilterStatus();
+      const initialStatus = getInitialFilterStatus();
+      const submitButton = document.getElementById('submit-button');
+      console.log(JSON.stringify(currentStatus));
+      console.log(JSON.stringify(initialStatus));
+      submitButton.style.display = isFilterStatusChanged(currentStatus, initialStatus) ? 'block' : 'none';
+    }
+
+    // New function to get current filter status
+    const reason86 = {};
+    function getCurrentFilterStatus() {
+      const ingredients = {};
+      document.querySelectorAll('.ingredient-toggle').forEach(button => {
+        ingredients[button.getAttribute('data-ingredient')] = button.classList.contains('active');
+      });
+      const equipment = {};
+      document.querySelectorAll('.equipment-toggle').forEach(button => {
+        equipment[button.getAttribute('data-equipment')] = button.classList.contains('active');
+      });
+      return {ingredients, equipment, reason86};
+    }
+
+    // New function to compare filter statussu
+    function isFilterStatusChanged(currentStatus, savedStatus) {
+      return JSON.stringify(currentStatus) !== JSON.stringify(savedStatus);
+    }
+
+    // Modify the submit button event listener
+    document.getElementById('submit-button').addEventListener('click', function() {
+      const currentStatus = getCurrentFilterStatus();
+      const initialStatus = getInitialFilterStatus();
+      const difference = getFilterStatusDifference(currentStatus, initialStatus);
+      console.log(difference);
+      // Alert the difference
+      Object.entries(difference.ingredients).forEach(([ingredient, value]) => {
+        if (!value) {
+          console.log(`fire an exception on ${ingredient}`);
+        } else {
+          console.log(`remove an exception on ${ingredient}`);
+        }
+      });
+      Object.entries(difference.equipment).forEach(([equipment, value]) => {
+        if (!value) {
+          console.log(`fire an exception on ${equipment}`);
+        } else {
+          console.log(`remove an exception on ${equipment}`);
+        }
+      });
+      Object.entries(difference.reason86).forEach(([item, reason]) => {
+        console.log(item, reason);
+        if (reason) {
+          console.log(`fire an exception on ${item} because ${reason}`);
+        } else {
+          console.log(`remove an exception on ${item}`);
+        }
+      });
+      console.log(difference);
+
+      // Save the current status and hide the button
+      localStorage.setItem('filterStatus', JSON.stringify(currentStatus));
+      this.style.display = 'none';
+    });
+
+    // Add this new function to calculate the difference
+    function getFilterStatusDifference(currentStatus, initialStatus) {
+      const difference = {
+        ingredients: {},
+        equipment: {},
+        reason86: {}
+      };
+
+      // Check ingredients
+      for (const ing in currentStatus.ingredients) {
+        if (currentStatus.ingredients[ing] !== initialStatus.ingredients[ing]) {
+          difference.ingredients[ing] = currentStatus.ingredients[ing];
+        }
+      }
+
+      // Check equipment
+      for (const eq in currentStatus.equipment) {
+        if (currentStatus.equipment[eq] !== initialStatus.equipment[eq]) {
+          difference.equipment[eq] = currentStatus.equipment[eq];
+        }
+      }
+
+      for (const item in currentStatus.reason86) {
+        if (currentStatus.reason86[item] !== initialStatus.reason86[item]) {
+          difference.reason86[item] = currentStatus.reason86[item];
+        }
+      }
+
+      return difference;
+    }
+
+    // Modify the fetch calls to include loading ingredient counts
+    Promise.all([
+      fetch('menu-items.json').then(response => response.json()),
+      fetch('equipment-counts.json').then(response => response.json())
+    ])
+      .then(([menuItems, equipmentCounts]) => {
+        // Load ingredientCounts from localStorage or fetch from JSON
+        let ingredientCounts;
+        const storedIngredientCounts = localStorage.getItem('ingredientCounts');
+        if (storedIngredientCounts) {
+          ingredientCounts = JSON.parse(storedIngredientCounts);
+          renderMenuItems(menuItems);
+          renderIngredientFilter(ingredientCounts);
+          renderEquipmentFilter(equipmentCounts);
+          attachEventListeners();
+          // updateSubmitButtonVisibility();
+          setupAdvancedToggle();
+          setupSidebarFunctionality(ingredientCounts);
+        } else {
+          fetch('ingredient-counts.json')
+            .then(response => response.json())
+            .then(fetchedIngredientCounts => {
+              ingredientCounts = fetchedIngredientCounts;
+              localStorage.setItem('ingredientCounts', JSON.stringify(ingredientCounts));
+              renderMenuItems(menuItems);
+              renderIngredientFilter(ingredientCounts);
+              renderEquipmentFilter(equipmentCounts);
+              attachEventListeners();
+              updateSubmitButtonVisibility();
+              setupAdvancedToggle();
+              setupSidebarFunctionality(ingredientCounts);
+            });
+        }
+      })
+      .catch(error => console.error('Error loading data:', error));
+
+    // Add this new function at the end of your script
+    function setupAdvancedToggle() {
+      const advancedCheckbox = document.getElementById('advanced-checkbox');
+      advancedCheckbox.addEventListener('change', function() {
+        document.documentElement.classList.toggle('advanced', this.checked);
+      });
+    }
+
+    // Add these new functions for the sidebar functionality
+    function renderSidebar(ingredientCounts) {
+      const ingredientList = document.getElementById('ingredient-list');
+      ingredientList.innerHTML = '';
+
+      Object.entries(ingredientCounts).forEach(([ingredient, count]) => {
+        const listItem = document.createElement('div');
+        listItem.className = 'ingredient-item';
+        listItem.innerHTML = `${ingredient} (${count})`;
+        if (count === 0) {
+          listItem.classList.add('out-of-stock');
+        }
+        ingredientList.appendChild(listItem);
+      });
+    }
+
+    function setupSidebarFunctionality(initialIngredientCounts) {
+      const searchInput = document.getElementById('ingredient-search');
+      const sortNameBtn = document.getElementById('sort-name');
+      const sortCountBtn = document.getElementById('sort-count');
+      let ingredientCounts = initialIngredientCounts;
+      let sortNameAsc = true;
+      let sortCountAsc = false;
+
+      // Search functionality
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const filteredIngredients = Object.fromEntries(
+          Object.entries(ingredientCounts).filter(([ingredient]) => 
+            ingredient.toLowerCase().includes(searchTerm)
+          )
+        );
+        renderSidebar(filteredIngredients);
+      });
+
+      // Sorting functionality
+      sortNameBtn.addEventListener('click', function() {
+        const sortedIngredients = Object.fromEntries(
+          Object.entries(ingredientCounts).sort((a, b) => {
+            return sortNameAsc ? a[0].localeCompare(b[0]) : b[0].localeCompare(a[0]);
+          })
+        );
+        renderSidebar(sortedIngredients);
+        sortNameAsc = !sortNameAsc;
+        updateSortButtonText(this, 'Name', sortNameAsc);
+      });
+
+      sortCountBtn.addEventListener('click', function() {
+        const sortedIngredients = Object.fromEntries(
+          Object.entries(ingredientCounts).sort((a, b) => {
+            return sortCountAsc ? a[1] - b[1] : b[1] - a[1];
+          })
+        );
+        renderSidebar(sortedIngredients);
+        sortCountAsc = !sortCountAsc;
+        updateSortButtonText(this, 'Count', sortCountAsc);
+      });
+
+      // Remove the fetch call for ingredient-counts.json
+      renderSidebar(ingredientCounts);
+      setupIngredientModal(ingredientCounts);
+    }
+
+    function updateSortButtonText(button, type, isAsc) {
+      button.textContent = `${type} ${isAsc ? '▲' : '▼'}`;
+    }
+
+    // Add this new function
+    function setupIngredientModal(initialIngredientCounts) {
+      const modal = document.getElementById('ingredient-modal');
+      const closeBtn = modal.querySelector('.close');
+      const outOfStockBtn = document.getElementById('out-of-stock-btn');
+      const onHandInput = document.getElementById('on-hand-count');
+      const wastedInput = document.getElementById('wasted-count');
+      const receivedInput = document.getElementById('received-count');
+      const cancelBtn = document.getElementById('cancel-btn');
+      const saveBtn = document.getElementById('save-btn');
+      let currentIngredient = '';
+      let originalCount = 0;
+      let ingredientCounts = initialIngredientCounts;
+
+      document.getElementById('ingredient-list').addEventListener('click', function(e) {
+        if (e.target.classList.contains('ingredient-item')) {
+          currentIngredient = e.target.textContent.split(' (')[0];
+          originalCount = ingredientCounts[currentIngredient] || 0;
+          
+          document.getElementById('modal-ingredient-name').textContent = currentIngredient;
+          onHandInput.value = originalCount;
+          wastedInput.value = 0;
+          receivedInput.value = 0;
+          
+          modal.style.display = 'block';
+        }
+      });
+
+      closeBtn.onclick = function() {
+        modal.style.display = 'none';
+      }
+
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = 'none';
+        }
+      }
+
+      outOfStockBtn.onclick = function() {
+        onHandInput.value = 0;
+      }
+
+      cancelBtn.onclick = function() {
+        modal.style.display = 'none';
+      }
+
+      saveBtn.onclick = function() {
+        const onHandInput = document.getElementById('on-hand-count');
+        const newCount = parseInt(onHandInput.value) || 0;
+        currentIngredient = document.getElementById('modal-ingredient-name').textContent;
+        if (currentIngredient && currentIngredient !== "") {
+          // Update the ingredientCounts object
+          ingredientCounts[currentIngredient] = newCount;
+          
+          // Save to localStorage
+          localStorage.setItem('ingredientCounts', JSON.stringify(ingredientCounts));
+          
+          console.log(`Saved ${currentIngredient}: ${newCount}`); // Debugging log
+          
+          updateIngredientStatus(currentIngredient, newCount);
+          renderSidebar(ingredientCounts);
+          updateMenuItemsBasedOnFilters();
+          modal.style.display = 'none';
+        } else {
+          console.error("Invalid ingredient name:", currentIngredient);
+        }
+      }
+    }
+
+    function updateIngredientStatus(ingredient, count) {
+      const filterButton = document.querySelector(`.ingredient-toggle[data-ingredient="${ingredient}"]`);
+      if (filterButton) {
+        if (count === 0) {
+          filterButton.classList.remove('active');
+        } else {
+          filterButton.classList.add('active');
+        }
+      }
+    }
+
+    // Add this new function to show the ingredient modal
+    function showIngredientModal(ingredient) {
+      const modal = document.getElementById('ingredient-modal');
+      const ingredientCounts = JSON.parse(localStorage.getItem('ingredientCounts')) || {};
+      const count = ingredientCounts[ingredient] || 0;
+
+      document.getElementById('modal-ingredient-name').textContent = ingredient;
+      document.getElementById('on-hand-count').value = count;
+      document.getElementById('wasted-count').value = 0;
+      document.getElementById('received-count').value = 0;
+
+      // Set the currentIngredient for the entire modal
+      modal.dataset.currentIngredient = ingredient;
+
+      modal.style.display = 'block';
+    }
+
+    // Update this function to show the equipment modal
+    function showEquipmentModal(equipment) {
+      const modal = document.getElementById('equipment-modal');
+      const equipmentName = document.getElementById('modal-equipment-name');
+      const cancelBtn = document.getElementById('equipment-cancel-btn');
+      const offBtn = document.getElementById('equipment-off-btn');
+      const onBtn = document.getElementById('equipment-on-btn');
+      const closeBtn = modal.querySelector('.equipment-close');
+
+      equipmentName.textContent = equipment;
+      modal.style.display = 'block';
+
+      cancelBtn.onclick = function() {
+        modal.style.display = 'none';
+      }
+
+      offBtn.onclick = function() {
+        updateEquipmentStatus(equipment, false);
+        modal.style.display = 'none';
+        document.getElementById('submit-button').click();
+      }
+
+      onBtn.onclick = function() {
+        updateEquipmentStatus(equipment, true);
+        modal.style.display = 'none';
+        document.getElementById('submit-button').click();
+      }
+
+      closeBtn.onclick = function() {
+        modal.style.display = 'none';
+      }
+
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = 'none';
+        }
+      }
+    }
+
+    // Add this new function to update equipment status
+    function updateEquipmentStatus(equipment, isActive) {
+      const equipmentToggle = document.querySelector(`.equipment-toggle[data-equipment="${equipment}"]`);
+      const equipmentBadges = document.querySelectorAll(`.badge.equipment[data-equipment="${equipment}"]`);
+
+      if (equipmentToggle) {
+        equipmentToggle.classList.toggle('active', isActive);
+      }
+
+      equipmentBadges.forEach(badge => {
+        badge.classList.toggle('active', isActive);
+      });
+
+      updateMenuItemsBasedOnFilters();
+      updateSubmitButtonVisibility();
+    }
+  </script>
+
+<style>
+  .equipment-toggle {
+    display: none;
+  }
+  .advanced .equipment-toggle {
+    display: block;
+  }
+  .toggle-86 {
+    display: none;
+  }
+  .advanced .toggle-86 {
+    display: block;
+  }
+  .badge.reason {
+    pointer-events: auto;
+  }
+  .equipment-toggle {
+    padding: 5px 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 15px;
+    background-color: #ccc;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .equipment-toggle.active {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  .ingredient-toggle {
+    padding: 5px 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 15px;
+    background-color: #ccc;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .ingredient-toggle.active {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  .badge {
+    background-color: #ccc;
+    color: black;
+  }
+
+  .badge.active {
+    background-color: #4CAF50;
+    color: white;
+  }
+  .badge.reason.inactive {
+    background-color: #fff;
+    border: 1px solid #ff4136;
+    color: #ff4136;
+    cursor: pointer;
+  }
+
+  .equipment-toggle.active, .equipment.active {
+    background-color:cadetblue;
+    color: white;
+  }
+
+  .submit-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: none;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    min-height: 30px;
+  }
+
+  .menu-item {
+    position: relative;
+    overflow: hidden;
+    min-height: 300px;
+  }
+
+  .menu-item.inactive::before {
+    content: "86ed";
+    position: absolute;
+    top: 20px;
+    right: -60px;
+    background-color: #ff4136;
+    color: white;
+    padding: 5px 0;
+    width: 200px;
+    text-align: center;
+    transform: rotate(45deg);
+    z-index: 1;
+  }
+
+  /* Add these new styles for the Advanced toggle */
+  .advanced-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  /* Add these new styles for the sidebar */
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 250px;
+    background-color: #f1f1f1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  /* Modify these styles for the sidebar header and sort buttons */
+  .sidebar-header {
+    margin-bottom: 20px;
+  }
+
+  #ingredient-search {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+
+  .sort-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .sort-button {
+    padding: 5px 10px;
+    cursor: pointer;
+    flex: 1;
+    margin-right: 5px;
+  }
+
+  .sort-button:last-child {
+    margin-right: 0;
+  }
+
+  .ingredient-list {
+    max-height: calc(100% - 100px);
+    overflow-y: auto;
+  }
+
+  .ingredient-item {
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+  }
+
+  /* Adjust the container to make room for the sidebar */
+  .container {
+    margin-left: 270px;
+  }
+
+  #ingredient-filter-area {
+    display: none;
+  }
+  #equipment-filter-area {
+    min-height: 30px;
+  }
+
+  /* Add these new styles for the modal */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+    border-radius: 5px;
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .count-input {
+    margin-bottom: 10px;
+  }
+
+  .count-input label {
+    display: inline-block;
+    width: 120px;
+  }
+
+  .count-input input {
+    width: 60px;
+  }
+
+  .out-of-stock-btn {
+    background-color: #ff4136;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    height: 28px; /* Match the height of the input */
+    font-size: 10px;
+  }
+
+  .ingredient-item {
+    cursor: pointer;
+  }
+
+  .ingredient-item:hover {
+    background-color: #e0e0e0;
+  }
+
+  .modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+  .cancel-btn, .save-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .cancel-btn {
+    background-color: #ccc;
+  }
+
+  .save-btn {
+    background-color: #4CAF50;
+    color: white;
+  }
+
+  .out-of-stock-btn {
+    background-color: #ff4136;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    height: 28px; /* Match the height of the input */
+  }
+
+  .count-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .count-input label {
+    flex: 0 0 120px;
+  }
+
+  .count-input input {
+    width: 60px;
+    margin-right: 10px;
+  }
+
+  /* Update the out-of-stock button style */
+  .out-of-stock-btn {
+    background-color: #ff4136;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    height: 28px; /* Match the height of the input */
+  }
+
+  /* Add styles for the 86ed ribbon on inactive badges */
+  .badge {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .badge:not(.active)::after {
+    content: "Out";
+    position: absolute;
+    top: 2px;
+    right: -18px;
+    background-color: #ff4136;
+    color: white;
+    font-size: 8px;
+    padding: 1px 20px;
+    transform: rotate(45deg);
+  }
+
+  /* Ensure the badge size doesn't change */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+    height: 24px;
+    padding: 0 8px;
+    box-sizing: border-box;
+  }
+
+  /* Add this new style for out-of-stock ingredients */
+  .ingredient-item.out-of-stock {
+    color: red;
+  }
+</style>
+
+</body>
+</html>

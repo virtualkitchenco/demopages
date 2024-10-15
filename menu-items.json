@@ -1,50 +1,376 @@
-[
+[    
     {
-      "name": "Honey Garlic Wings",
-      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/7a54097b-ddc8-4087-8ed4-73159654a8fb-retina-large.jpg",
-      "ingredients": ["chicken", "garlic", "honey"],
-      "equipment": ["fryer"]
-    },
-    {
-      "name": "BBQ Ranch Wings",
-      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/4b31ad3a-485d-4bdb-97a2-6b2f6374297b-retina-large.jpg",
-      "ingredients": ["chicken", "bbq sauce", "ranch"],
-      "equipment": ["fryer"]
-    },
-    {
-      "name": "Spicy Garlic Wings",
+      "name": "Buffalo Wings",
       "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/51b0cd7e-acc9-4405-8d7b-5276b0c30831-retina-large.jpg",
-      "ingredients": ["chicken", "spicy sauce", "garlic"],
-      "equipment": ["fryer"]
+      "ingredients": ["chicken wings", "buffalo sauce", "butter"],
+      "equipment": ["fryer"],
+      "category": "Classic Wings"
+    },
+    {
+      "name": "Lemon Pepper Wet Wings",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/7a54097b-ddc8-4087-8ed4-73159654a8fb-retina-large.jpg",
+      "ingredients": ["chicken wings", "lemon juice", "black pepper", "butter"],
+      "equipment": ["fryer"],
+      "category": "Classic Wings"
+    },
+    {
+      "name": "Korean BBQ Wings",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/822ccd56-06fe-44af-835d-e5d564f630aa-retina-large.jpg",
+      "ingredients": ["chicken wings", "soy sauce", "gochujang", "sesame seeds", "garlic"],
+      "equipment": ["fryer"],
+      "category": "Classic Wings"
+    },
+    {
+      "name": "Szechuan Lemon Pepper Wings",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/4b31ad3a-485d-4bdb-97a2-6b2f6374297b-retina-large.jpg",
+      "ingredients": ["chicken wings", "Szechuan peppercorns", "lemon zest", "chili oil", "butter"],
+      "equipment": ["fryer"],
+      "category": "Classic Wings"
+    },
+    {
+      "name": "Mango Habanero Wings",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/31d75605-97e5-435f-8ee2-5ff78db73ebe-retina-large.jpg",
+      "ingredients": ["chicken wings", "mango puree", "habanero peppers", "honey", "lime juice"],
+      "equipment": ["fryer"],
+      "category": "Classic Wings"
+    },
+    {
+      "name": "Garlic Parm Wings",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/0154b705-6730-4119-9312-eaf308364408-retina-large.jpg",
+      "ingredients": ["chicken wings", "garlic", "parmesan cheese", "butter", "parsley"],
+      "equipment": ["fryer"],
+      "category": "Classic Wings"
+    },
+    {
+      "name": "Spicy Garlic Parm Wings",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/fc7af70f-b9e8-4d86-b6be-3af89a8742d5-retina-large.jpg",
+      "ingredients": ["chicken wings", "garlic", "parmesan cheese", "buffalo sauce", "red pepper flakes"],
+      "equipment": ["fryer"],
+      "category": "Classic Wings"
+    },
+    {
+      "name": "Buffalo Teriyaki Wings",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/a5f288b6-b673-4e3f-9208-d1ef3088f3ef-retina-large.jpg",
+      "ingredients": ["chicken wings", "buffalo sauce", "teriyaki sauce", "green onions"],
+      "equipment": ["fryer"],
+      "category": "Classic Wings"
+    },
+    {
+      "name": "Truffalo Wings",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/d757ebee-4bec-4f8b-a75c-563844ec06ed-retina-large.jpg",
+      "ingredients": ["chicken wings", "buffalo sauce", "truffle oil", "parmesan cheese"],
+      "equipment": ["fryer"],
+      "category": "Classic Wings"
+    },
+    {
+      "name": "Creamy Sriracha Wings",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/7bf69b4b-d945-4918-882a-fe2035993604-retina-large.jpg",
+      "ingredients": ["chicken wings", "sriracha sauce", "mayonnaise", "lime juice", "cilantro"],
+      "equipment": ["fryer"],
+      "category": "Classic Wings"
+    },
+    {
+      "name": "Carolina Reaper Wings",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/45123ac2-716a-462e-b69e-fdbbc70882e4-retina-large.jpg",
+      "ingredients": ["chicken wings", "carolina reaper peppers", "vinegar", "garlic", "brown sugar"],
+      "equipment": ["fryer"],
+      "category": "Classic Wings"
+    },
+    {
+      "name": "Teriyaki Wings",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/1a5207cd-5d03-49f2-8b8f-eaa31405f42e-retina-large.jpg",
+      "ingredients": ["chicken wings", "soy sauce", "mirin", "sake", "ginger"],
+      "equipment": ["fryer"],
+      "category": "Classic Wings"
+    },
+    {
+      "name": "Buffalo Boneless",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/74ee41cf-cb75-4a8e-8735-4bfd48b04ada-retina-large.jpg",
+      "ingredients": ["boneless chicken", "buffalo sauce", "flour", "vegetable oil"],
+      "equipment": ["fryer"],
+      "category": "Boneless Wings",
+      "price": 11.89,
+      "description": "Crispy chicken bites tossed in a classic buffalo sauce. *Does not come with a dip sauce, add below for an additional cost."
+    },
+    {
+      "name": "Mango Habanero Boneless",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/7353f2f7-1b6c-4c78-88e6-89d0ff2151b8-retina-large.jpg",
+      "ingredients": ["boneless chicken", "mango puree", "habanero peppers", "honey", "lime juice", "flour"],
+      "equipment": ["fryer"],
+      "category": "Boneless Wings",
+      "price": 11.89,
+      "description": "Boneless chicken wings tossed in a sweet and spicy mango habanero sauce. Does not come with a dip sauce, add below for an additional cost."
+    },
+    {
+      "name": "Creamy Sriracha Boneless",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/505877cb-ed2d-48f6-9d09-c6092e85991f-retina-large.jpg",
+      "ingredients": ["boneless chicken", "sriracha sauce", "mayonnaise", "sour cream", "lime juice", "flour"],
+      "equipment": ["fryer"],
+      "category": "Boneless Wings",
+      "price": 11.89,
+      "description": "Crispy chicken bites tossed in our housemade Creamy Sriracha Sauce. *Does not come with a dip sauce, add below for an additional cost."
+    },
+    {
+      "name": "Garlic Parm Boneless",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/2a3c632f-7266-45bb-bbfa-2952d1ff365c-retina-large.jpg",
+      "ingredients": ["boneless chicken", "garlic", "parmesan cheese", "butter", "parsley", "flour"],
+      "equipment": ["fryer"],
+      "category": "Boneless Wings",
+      "price": 11.89,
+      "description": "Boneless chicken wings tossed in a bold garlic parmesan sauce. Does not come with a dip sauce, add below for an additional cost."
+    },
+    {
+      "name": "Truffalo Boneless",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/f919720d-b5a4-4ebc-84a2-b6c34f79428e-retina-large.jpg",
+      "ingredients": ["boneless chicken", "buffalo sauce", "truffle oil", "parmesan cheese", "flour"],
+      "equipment": ["fryer"],
+      "category": "Boneless Wings",
+      "price": 11.89,
+      "description": "Crispy chicken bites tossed in a classic buffalo sauce and drizzled with truffle oil. *Does not come with a dip sauce, add below for an additional cost."
+    },
+    {
+      "name": "Buffalo Teriyaki Boneless",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/1313eca9-d4c7-4f1c-8e76-bb222af8861b-retina-large.jpg",
+      "ingredients": ["boneless chicken", "buffalo sauce", "teriyaki sauce", "green onions", "sesame seeds", "flour"],
+      "equipment": ["fryer"],
+      "category": "Boneless Wings",
+      "price": 11.89,
+      "description": "Boneless chicken wings tossed in a blend of sweet and sticky teriyaki and spicy buffalo sauce. Does not come with a dip sauce, add below for an additional cost."
+    },
+    {
+      "name": "Teriyaki Boneless",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/77c88894-a97a-4019-9573-e82ebfdeecb6-retina-large.jpg",
+      "ingredients": ["boneless chicken", "soy sauce", "mirin", "sake", "ginger", "flour"],
+      "equipment": ["fryer"],
+      "category": "Boneless Wings",
+      "price": 11.89,
+      "description": "Crispy chicken bites tossed in a classic teriyaki sauce. *Does not come with a dip sauce, add below for an additional cost."
+    },
+    {
+      "name": "Carolina Reaper Boneless",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/9f7f82be-bd3f-4669-ac4b-e6ec6f0d733c-retina-large.jpg",
+      "ingredients": ["boneless chicken", "carolina reaper peppers", "vinegar", "garlic", "brown sugar", "flour"],
+      "equipment": ["fryer"],
+      "category": "Boneless Wings",
+      "price": 11.89,
+      "description": "Boneless chicken wings tossed in super spicy Carolina Reaper wing sauce. Does not come with a dip sauce, add below for an additional cost."
     },
     {
       "name": "Classic Fries",
       "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/fa8d3d5a-c373-47c2-bf64-9e90156e2a3a-retina-large.jpg",
-      "ingredients": ["potato", "garlic"],
-      "equipment": ["fryer"]
+      "ingredients": ["potatoes", "vegetable oil", "salt", "black pepper"],
+      "equipment": ["fryer"],
+      "category": "Side Fries & Tots",
+      "price": 4.49,
+      "description": "Classic, crispy, seasoned french fries served with a side of ketchup."
+    },
+    {
+      "name": "Jalapeno Bacon Tots",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/5a681f8b-844b-415a-aa8b-994402982b58-retina-large.jpg",
+      "ingredients": ["potato tots", "cheddar cheese sauce", "pickled jalapenos", "bacon bits", "green onions"],
+      "equipment": ["fryer", "oven"],
+      "category": "Side Fries & Tots",
+      "price": 7.99,
+      "description": "Crispy, seasoned tater tots topped with cheddar cheese sauce, pickled jalapenos, and smoky bacon bits."
+    },
+    {
+      "name": "Signature Fries",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/ebda20ec-9357-4130-ad3b-660f9b82c42b-retina-large.jpg",
+      "ingredients": ["potatoes", "cheddar cheese sauce", "caramelized onions", "signature sauce", "vegetable oil", "salt"],
+      "equipment": ["fryer"],
+      "category": "Side Fries & Tots",
+      "price": 7.99,
+      "description": "Crispy, seasoned french fries topped with cheddar cheese sauce, sweet caramelized onions, and our housemade Signature Sauce, served with a side of ketchup."
     },
     {
       "name": "Tater Tots",
       "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/b5961eec-590e-43a0-b78c-ce7e8f69d318-retina-large.jpg",
-      "ingredients": ["potato"],
-      "equipment": ["fryer", "i3"]
+      "ingredients": ["potato tots", "vegetable oil", "salt", "black pepper"],
+      "equipment": ["fryer"],
+      "category": "Side Fries & Tots",
+      "price": 4.49,
+      "description": "Crispy, seasoned tater tots served with a side of ketchup."
     },
     {
-      "name": "Buffalo Boneless",
-      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/f919720d-b5a4-4ebc-84a2-b6c34f79428e-retina-large.jpg",
-      "ingredients": ["chicken", "spicy sauce", "ranch"],
-      "equipment": ["i3"]
+      "name": "Roasted Garlic Fries",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/a4c51806-ea98-4322-8f8d-250ac1c0980e-retina-large.jpg",
+      "ingredients": ["potatoes", "roasted garlic", "garlic aioli", "parsley", "vegetable oil", "salt"],
+      "equipment": ["fryer"],
+      "category": "Side Fries & Tots",
+      "price": 5.99,
+      "description": "Crispy, garlic-seasoned french fries drizzled with a bold roasted garlic aioli."
     },
     {
-        "name": "Mexican Coke",
-        "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/9f560a4f-f8df-42b3-9e43-65ac1467c4e2-retina-large.jpg",
-        "ingredients": ["mexican coke"],
-        "equipment": []
+      "name": "Sweet Potato Fries",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/64fccc2e-520b-4d45-bb97-346412f03937-retina-large.jpg",
+      "ingredients": ["sweet potatoes", "vegetable oil", "salt", "cinnamon sugar"],
+      "equipment": ["fryer"],
+      "category": "Side Fries & Tots",
+      "price": 5.99,
+      "description": "Crispy, seasoned sweet potato fries served with a side of ketchup."
     },
     {
-        "name": "Side Ranch",
-        "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/0a4d9109-b746-4aa8-bdeb-8d0e6c97a5e5-retina-large.jpg",
-        "ingredients": ["ranch"],
-        "equipment": []
+      "name": "Signature Tots",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/12a6e219-c135-425a-a4f6-d23522390211-retina-large.jpg",
+      "ingredients": ["potato tots", "cheddar cheese sauce", "caramelized onions", "signature sauce", "vegetable oil", "salt"],
+      "equipment": ["fryer"],
+      "category": "Side Fries & Tots",
+      "price": 7.99,
+      "description": "Crispy, seasoned tater tots topped with cheddar cheese sauce, sweet caramelized onions, and our housemade Signature Sauce."
+    },
+    {
+      "name": "Zesty Feta Fries",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/dd3daa60-0067-424c-afb1-7285ef3ef332-retina-large.jpg",
+      "ingredients": ["potatoes", "feta cheese", "lemon pepper butter sauce", "parsley", "vegetable oil", "salt"],
+      "equipment": ["fryer"],
+      "category": "Side Fries & Tots",
+      "price": 5.99,
+      "description": "Crispy, seasoned french fries drizzled with zesty our lemon pepper butter sauce and topped with fresh crumbled feta cheese."
+    },
+    {
+      "name": "Hot Honey Chocolate Chunk Brownie",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/4e653e81-71ba-4663-b3e5-bf40f47d2f6f-retina-large.jpg",
+      "ingredients": ["Hot Honey Chocolate Chunk Brownie"],
+      "equipment": ["oven"],
+      "category": "Dessert",
+      "price": 2.99,
+      "description": "Warm chocolate chunk brownie drizzled with Mike's Hot Honey."
+    },
+    {
+      "name": "Chocolate Chip Cookie",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/0041908a-1efc-44fe-848c-2d554b07ac0b-retina-large.jpg",
+      "ingredients": ["Chocolate Chip Cookie"],
+      "equipment": ["oven"],
+      "category": "Dessert",
+      "price": 1.00,
+      "description": "Warm chocolate chip cookie with a gooey center."
+    },
+    {
+      "name": "Mexican Coke",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/9f560a4f-f8df-42b3-9e43-65ac1467c4e2-retina-large.jpg",
+      "ingredients": ["Mexican Coke"],
+      "category": "Drinks",
+      "price": 3.99,
+      "description": "Sweetened with cane sugar, this classic Mexican cola offers a refreshing, nostalgic taste."
+    },
+    {
+      "name": "Coke",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/d0febfc3-df96-4fcc-af9e-a4a8cd8fc111-retina-large.jpg",
+      "ingredients": ["Coke"],
+      "category": "Drinks",
+      "price": 2.99,
+      "description": "Carbonated soft drink with a classic cola flavor."
+    },
+    {
+      "name": "IBC Root Beer",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/4464109c-bdb5-4bd5-b933-820bd3c6c869-retina-large.jpg",
+      "ingredients": ["IBC Root Beer"],
+      "category": "Drinks",
+      "price": 3.99,
+      "description": "Rich and creamy root beer with a classic, nostalgic flavor."
+    },
+    {
+      "name": "La Croix Lemon",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/c9fc6b96-5865-4d90-9af1-c8a9365a702f-retina-large.jpg",
+      "ingredients": ["La Croix Lemon"],
+      "category": "Drinks",
+      "price": 2.99,
+      "description": "Sparkling water with a hint of natural lemon flavor."
+    },
+    {
+      "name": "Mountain Dew",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/cd65a4d0-f68d-41c7-b2fc-3478b670a263-retina-large.jpg",
+      "ingredients": ["Mountain Dew"],
+      "category": "Drinks",
+      "price": 2.99,
+      "description": "Citrus-flavored carbonated soft drink with a bold taste."
+    },
+    {
+      "name": "Sprite",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/f59466be-5b63-4e95-a087-f0166eb2f8a8-retina-large.jpg",
+      "ingredients": ["Sprite"],
+      "category": "Drinks",
+      "price": 2.99,
+      "description": "Lemon-lime soda with a crisp, refreshing taste."
+    },
+    {
+      "name": "Diet Coke",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/df831734-cbfb-4b8e-82fa-2f32d0538615-retina-large.jpg",
+      "ingredients": ["Diet Coke"],
+      "category": "Drinks",
+      "price": 2.99,
+      "description": "Sugar-free cola with zero calories."
+    },
+    {
+      "name": "Side Ranch",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/0a4d9109-b746-4aa8-bdeb-8d0e6c97a5e5-retina-large.jpg",
+      "ingredients": ["Side Ranch"],
+      "category": "Sauces",
+      "price": 0.99,
+      "description": "Creamy ranch dressing with a smooth texture, perfect for dipping or adding to salads."
+    },
+    {
+      "name": "Side Housemade Signature Sauce",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/785588a2-645b-43ad-a2dd-39af7720e754-retina-large.jpg",
+      "ingredients": ["Side Housemade Signature Sauce"],
+      "category": "Sauces",
+      "price": 0.99,
+      "description": "Bold and creamy housemade signature sauce."
+    },
+    {
+      "name": "Side Housemade Creamy Sriracha",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/b46a7a82-ec4d-42e5-9f9f-05cca9a8e8d0-retina-large.jpg",
+      "ingredients": ["Side Housemade Creamy Sriracha"],
+      "category": "Sauces",
+      "price": 0.99,
+      "description": "Sweet and creamy housemade sriracha sauce."
+    },
+    {
+      "name": "Side Bleu Cheese",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/5d6e777a-7e80-41a9-90ad-5d133be94fab-retina-large.jpg",
+      "ingredients": ["Side Bleu Cheese"],
+      "category": "Sauces",
+      "price": 0.99,
+      "description": "Creamy bleu cheese sauce with rich, tangy flavor and subtle chunks of bleu cheese."
+    },
+    {
+      "name": "Side Korean BBQ",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/cb6c3c81-8f98-463e-a7ce-5bac8b1be63a-retina-large.jpg",
+      "ingredients": ["Side Korean BBQ"],
+      "category": "Sauces",
+      "price": 0.99,
+      "description": "Rich and savory Korean barbecue sauce with a blend of soy, garlic, and sesame flavors."
+    },
+    {
+      "name": "Side Housemade White BBQ",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/bc3832f8-e250-4a85-8a39-de644b30f77c-retina-large.jpg",
+      "ingredients": ["Side Housemade White BBQ"],
+      "category": "Sauces",
+      "price": 0.99,
+      "description": "Sweet and smoky housemade Alabama-style BBQ sauce."
+    },
+    {
+      "name": "Side Ketchup",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/5bfbb8b7-3846-4901-9b26-6dfc333eda7c-retina-large.jpg",
+      "ingredients": ["Side Ketchup"],
+      "category": "Sauces",
+      "price": 0.99,
+      "description": "A tangy and smooth tomato-based condiment, perfect for pairing with fries, burgers, and more."
+    },
+    {
+      "name": "Side Toasted Sesame Ginger Vinaigrette",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/cc6c9a89-e988-4dc7-ac53-bd75f52b751e-retina-large.jpg",
+      "ingredients": ["Side Toasted Sesame Ginger Vinaigrette"],
+      "category": "Sauces",
+      "price": 0.99,
+      "description": "Infused with toasted sesame and ginger, this vinaigrette offers a balanced blend of nutty and tangy flavors."
+    },
+    {
+      "name": "Side Housemade Citrus Herb Vinaigrette",
+      "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/6dc73299-edf9-4e0b-b326-4ae7a5662157-retina-large.jpg",
+      "ingredients": ["Side Housemade Citrus Herb Vinaigrette"],
+      "category": "Sauces",
+      "price": 0.99,
+      "description": "Tangy and refreshing vinaigrette made with fresh citrus juice and a blend of herbs."
     }
   ]
