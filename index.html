@@ -1,243 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menu Item Management</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <!-- Replace external shadcn styles with inline styles -->
-  <style>
-    /* Add your shadcn-inspired styles here */
-    .toggle-switch {
-      position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 34px;
-    }
-    .toggle-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .toggle-slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: .4s;
-      border-radius: 34px;
-    }
-    .toggle-slider:before {
-      position: absolute;
-      content: "";
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: .4s;
-      border-radius: 50%;
-    }
-    input:checked + .toggle-slider {
-      background-color: #2196F3;
-    }
-    input:checked + .toggle-slider:before {
-      transform: translateX(26px);
-    }
-    .toggle-label {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 10px;
-      font-weight: bold;
-      color: white;
-      transition: .4s;
-      width: 26px; /* Match the width of the slider button */
-    }
-    .toggle-label-on {
-      left: 8px; /* Adjust as needed */
-      text-align: left;
-    }
-    .toggle-label-off {
-      right: 8px; /* Adjust as needed */
-      text-align: right;
-    }
-    input:not(:checked) + .toggle-slider .toggle-label-on,
-    input:checked + .toggle-slider .toggle-label-off {
-      opacity: 0;
-    }
-
-    /* Add this new style for smooth scrolling */
-    html {
-      scroll-behavior: smooth;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UX Mockups Demos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .demo-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+        }
+        .demo-item a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .demo-links {
+            display: flex;
+            justify-content: space-around;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        td a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        td a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
-  <div class="flex h-screen">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md">
-      <nav class="p-4">
-        <h2 class="text-lg font-semibold mb-4">Categories</h2>
-        <ul class="space-y-2">
-          <li><a href="#classic-wings" class="block hover:bg-gray-100 p-2 rounded category-link">Classic Wings</a></li>
-          <li><a href="#boneless-wings" class="block hover:bg-gray-100 p-2 rounded category-link">Boneless Wings</a></li>
-          <li><a href="#side-fries-and-tots" class="block hover:bg-gray-100 p-2 rounded category-link">Side Fries & Tots</a></li>
-          <li><a href="#dessert" class="block hover:bg-gray-100 p-2 rounded category-link">Dessert</a></li>
-          <li><a href="#drinks" class="block hover:bg-gray-100 p-2 rounded category-link">Drinks</a></li>
-          <li><a href="#sauces" class="block hover:bg-gray-100 p-2 rounded category-link">Sauces</a></li>
-        </ul>
-      </nav>
-    </aside>
-
-    <div class="flex-1 flex flex-col">
-      <!-- Header -->
-      <header class="bg-white shadow-md p-4">
-        <div class="max-w-3xl mx-auto flex items-center space-x-4">
-          <input type="text" placeholder="Search items or ingredients" class="flex-1 p-2 border rounded-md">
-          <div id="item-filter" class="flex items-center space-x-2">
-            <span class="text-sm font-medium">Inactive only</span>
-            <label class="toggle-switch">
-              <input type="checkbox" id="inactive-toggle">
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-        </div>
-      </header>
-
-      <!-- Main panel -->
-      <main class="flex-1 overflow-y-auto p-6">
-        <div id="menu-items" class="max-w-3xl mx-auto space-y-8">
-          <!-- Menu items will be dynamically inserted here -->
-        </div>
-      </main>
+<body>
+    <h1>UX Mockups Demos</h1>
+    <div class="demo-grid">
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Mockup</th>
+                    <th>PRD</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Menu86ing</td>
+                    <td><a href="menu86ing.html" target="_blank">View Mockup</a></td>
+                    <td><a href="menu86ing.md" target="_blank">View PRD</a></td>
+                </tr>
+                <tr>
+                    <td>Menu Ordering</td>
+                    <td><a href="menuOrdering.html" target="_blank">View Mockup</a></td>
+                    <td><a href="menuOrdering.md" target="_blank">View PRD</a></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      fetch('menu-items.json')
-        .then(response => response.json())
-        .then(data => {
-          const menuItemsContainer = document.getElementById('menu-items');
-          
-          // Group items by category
-          const groupedItems = data.reduce((acc, item) => {
-            if (!acc[item.category]) {
-              acc[item.category] = [];
-            }
-            acc[item.category].push(item);
-            return acc;
-          }, {});
-
-          // Render items by category
-          for (const [category, items] of Object.entries(groupedItems)) {
-            const categoryElement = document.createElement('div');
-            const categoryId = category.toLowerCase().replace(/\s+/g, '-');
-            console.log(categoryId);
-            categoryElement.innerHTML = `
-              <h2 id="${categoryId}" class="text-2xl font-bold mb-4">${category}</h2>
-              <div class="space-y-4">
-                ${items.map(item => `
-                  <div class="bg-white rounded-lg shadow-md p-4 flex items-center relative">
-                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md">
-                    <div class="ml-4 flex-1">
-                      <h3 class="text-lg font-semibold">${item.name}</h3>
-                      <p class="text-sm text-gray-600">${item.ingredients.join(', ')}</p>
-                    </div>
-                    <label class="toggle-switch">
-                      <input type="checkbox" checked data-id="${item.name}">
-                      <span class="toggle-slider">
-                        <span class="toggle-label toggle-label-on">ON</span>
-                        <span class="toggle-label toggle-label-off">OFF</span>
-                      </span>
-                    </label>
-                  </div>
-                `).join('')}
-              </div>
-            `;
-            menuItemsContainer.appendChild(categoryElement);
-          }
-
-          // Add event listeners for toggle buttons
-          const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-          checkboxes.forEach(checkbox => {
-            const label = checkbox.closest('label');
-            label.addEventListener('click', (event) => {
-              event.preventDefault();
-              checkbox.checked = !checkbox.checked;
-              checkbox.dispatchEvent(new Event('change'));
-            });
-
-            checkbox.addEventListener('change', (event) => {
-              const itemId = checkbox.dataset.id;
-              const item = data.find(i => i.name === itemId);
-              item.active = event.target.checked;
-              const itemElement = checkbox.closest('.bg-white');
-              
-              // Toggle opacity and grayscale filter
-              itemElement.style.opacity = item.active ? '1' : '0.5';
-              itemElement.querySelector('img').style.filter = item.active ? 'none' : 'grayscale(100%)';
-              
-              // Remove the '86ed' ribbon functionality
-            });
-          });
-
-          // Replace filter radio buttons with toggle functionality
-          const inactiveToggle = document.getElementById('inactive-toggle');
-          inactiveToggle.addEventListener('change', filterItems);
-
-          function filterItems() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const showInactiveOnly = inactiveToggle.checked;
-
-            document.querySelectorAll('#menu-items > div > div > div').forEach(item => {
-              const itemName = item.querySelector('h3').textContent.toLowerCase();
-              const itemIngredients = item.querySelector('p').textContent.toLowerCase();
-              const isActive = item.querySelector('input[type="checkbox"]').checked;
-
-              const matchesSearch = itemName.includes(searchTerm) || itemIngredients.includes(searchTerm);
-              const matchesFilter = !showInactiveOnly || (showInactiveOnly && !isActive);
-
-              item.style.display = matchesSearch && matchesFilter ? 'flex' : 'none';
-            });
-          }
-
-          // Modify existing search functionality to also apply the filter
-          const searchInput = document.querySelector('input[type="text"]');
-          searchInput.addEventListener('input', filterItems);
-
-          // Modify existing checkbox change event to also apply the filter
-          checkboxes.forEach(checkbox => {
-            // ... existing code ...
-
-            checkbox.addEventListener('change', (event) => {
-              // ... existing code ...
-              
-              filterItems(); // Apply filter after changing item state
-            });
-          });
-
-          // Add this new code for smooth scrolling
-          const categoryLinks = document.querySelectorAll('.category-link');
-          categoryLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-              e.preventDefault();
-              const targetId = link.getAttribute('href');
-              const targetElement = document.querySelector(targetId);
-              if (targetElement) {
-                targetElement.scrollIntoView({
-                  behavior: 'smooth',
-                  block: 'start'
-                });
-              }
-            });
-          });
-        });
-    });
-  </script>
 </body>
 </html>

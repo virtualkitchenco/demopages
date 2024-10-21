@@ -4,84 +4,108 @@
       "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/51b0cd7e-acc9-4405-8d7b-5276b0c30831-retina-large.jpg",
       "ingredients": ["chicken wings", "buffalo sauce", "butter"],
       "equipment": ["fryer"],
-      "category": "Classic Wings"
+      "price": 11.89,
+      "category": "Classic Wings",
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
     },
     {
       "name": "Lemon Pepper Wet Wings",
       "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/7a54097b-ddc8-4087-8ed4-73159654a8fb-retina-large.jpg",
       "ingredients": ["chicken wings", "lemon juice", "black pepper", "butter"],
       "equipment": ["fryer"],
-      "category": "Classic Wings"
+      "price": 11.89,
+      "category": "Classic Wings",
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
     },
     {
       "name": "Korean BBQ Wings",
       "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/822ccd56-06fe-44af-835d-e5d564f630aa-retina-large.jpg",
       "ingredients": ["chicken wings", "soy sauce", "gochujang", "sesame seeds", "garlic"],
       "equipment": ["fryer"],
-      "category": "Classic Wings"
+      "price": 11.89,
+      "category": "Classic Wings",
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
     },
     {
       "name": "Szechuan Lemon Pepper Wings",
       "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/4b31ad3a-485d-4bdb-97a2-6b2f6374297b-retina-large.jpg",
       "ingredients": ["chicken wings", "Szechuan peppercorns", "lemon zest", "chili oil", "butter"],
       "equipment": ["fryer"],
-      "category": "Classic Wings"
+      "price": 11.89,
+      "category": "Classic Wings",
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
     },
     {
       "name": "Mango Habanero Wings",
       "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/31d75605-97e5-435f-8ee2-5ff78db73ebe-retina-large.jpg",
       "ingredients": ["chicken wings", "mango puree", "habanero peppers", "honey", "lime juice"],
       "equipment": ["fryer"],
-      "category": "Classic Wings"
+      "price": 11.89,
+      "category": "Classic Wings",
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
     },
     {
       "name": "Garlic Parm Wings",
       "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/0154b705-6730-4119-9312-eaf308364408-retina-large.jpg",
       "ingredients": ["chicken wings", "garlic", "parmesan cheese", "butter", "parsley"],
       "equipment": ["fryer"],
-      "category": "Classic Wings"
+      "price": 11.89,
+        "category": "Classic Wings",
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
     },
     {
       "name": "Spicy Garlic Parm Wings",
       "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/fc7af70f-b9e8-4d86-b6be-3af89a8742d5-retina-large.jpg",
       "ingredients": ["chicken wings", "garlic", "parmesan cheese", "buffalo sauce", "red pepper flakes"],
       "equipment": ["fryer"],
-      "category": "Classic Wings"
+      "price": 11.89,
+      "category": "Classic Wings",
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
     },
     {
       "name": "Buffalo Teriyaki Wings",
       "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/a5f288b6-b673-4e3f-9208-d1ef3088f3ef-retina-large.jpg",
       "ingredients": ["chicken wings", "buffalo sauce", "teriyaki sauce", "green onions"],
       "equipment": ["fryer"],
-      "category": "Classic Wings"
+      "price": 11.89,
+      "category": "Classic Wings",
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
     },
     {
       "name": "Truffalo Wings",
       "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/d757ebee-4bec-4f8b-a75c-563844ec06ed-retina-large.jpg",
       "ingredients": ["chicken wings", "buffalo sauce", "truffle oil", "parmesan cheese"],
       "equipment": ["fryer"],
-      "category": "Classic Wings"
+      "price": 11.89,
+      "category": "Classic Wings",
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
     },
     {
       "name": "Creamy Sriracha Wings",
       "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/7bf69b4b-d945-4918-882a-fe2035993604-retina-large.jpg",
       "ingredients": ["chicken wings", "sriracha sauce", "mayonnaise", "lime juice", "cilantro"],
       "equipment": ["fryer"],
-      "category": "Classic Wings"
+      "price": 11.89,
+        "category": "Classic Wings",
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
     },
     {
       "name": "Carolina Reaper Wings",
       "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/45123ac2-716a-462e-b69e-fdbbc70882e4-retina-large.jpg",
       "ingredients": ["chicken wings", "carolina reaper peppers", "vinegar", "garlic", "brown sugar"],
       "equipment": ["fryer"],
-      "category": "Classic Wings"
+      "price": 11.89,
+      "category": "Classic Wings",
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
     },
     {
       "name": "Teriyaki Wings",
       "image": "https://img.cdn4dd.com/cdn-cgi/image/fit=contain,width=1920,format=auto,quality=50/https://doordash-static.s3.amazonaws.com/media/photosV2/1a5207cd-5d03-49f2-8b8f-eaa31405f42e-retina-large.jpg",
       "ingredients": ["chicken wings", "soy sauce", "mirin", "sake", "ginger"],
       "equipment": ["fryer"],
-      "category": "Classic Wings"
+      "price": 11.89,
+      "category": "Classic Wings",
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
     },
     {
       "name": "Buffalo Boneless",
@@ -90,6 +114,7 @@
       "equipment": ["fryer"],
       "category": "Boneless Wings",
       "price": 11.89,
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
       "description": "Crispy chicken bites tossed in a classic buffalo sauce. *Does not come with a dip sauce, add below for an additional cost."
     },
     {
@@ -99,6 +124,7 @@
       "equipment": ["fryer"],
       "category": "Boneless Wings",
       "price": 11.89,
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
       "description": "Boneless chicken wings tossed in a sweet and spicy mango habanero sauce. Does not come with a dip sauce, add below for an additional cost."
     },
     {
@@ -108,6 +134,7 @@
       "equipment": ["fryer"],
       "category": "Boneless Wings",
       "price": 11.89,
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
       "description": "Crispy chicken bites tossed in our housemade Creamy Sriracha Sauce. *Does not come with a dip sauce, add below for an additional cost."
     },
     {
@@ -117,6 +144,7 @@
       "equipment": ["fryer"],
       "category": "Boneless Wings",
       "price": 11.89,
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
       "description": "Boneless chicken wings tossed in a bold garlic parmesan sauce. Does not come with a dip sauce, add below for an additional cost."
     },
     {
@@ -126,6 +154,7 @@
       "equipment": ["fryer"],
       "category": "Boneless Wings",
       "price": 11.89,
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
       "description": "Crispy chicken bites tossed in a classic buffalo sauce and drizzled with truffle oil. *Does not come with a dip sauce, add below for an additional cost."
     },
     {
@@ -135,6 +164,7 @@
       "equipment": ["fryer"],
       "category": "Boneless Wings",
       "price": 11.89,
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
       "description": "Boneless chicken wings tossed in a blend of sweet and sticky teriyaki and spicy buffalo sauce. Does not come with a dip sauce, add below for an additional cost."
     },
     {
@@ -144,6 +174,7 @@
       "equipment": ["fryer"],
       "category": "Boneless Wings",
       "price": 11.89,
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
       "description": "Crispy chicken bites tossed in a classic teriyaki sauce. *Does not come with a dip sauce, add below for an additional cost."
     },
     {
@@ -153,6 +184,7 @@
       "equipment": ["fryer"],
       "category": "Boneless Wings",
       "price": 11.89,
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
       "description": "Boneless chicken wings tossed in super spicy Carolina Reaper wing sauce. Does not come with a dip sauce, add below for an additional cost."
     },
     {
@@ -162,6 +194,7 @@
       "equipment": ["fryer"],
       "category": "Side Fries & Tots",
       "price": 4.49,
+      "modifiers": ["Sauces"],
       "description": "Classic, crispy, seasoned french fries served with a side of ketchup."
     },
     {
@@ -171,6 +204,7 @@
       "equipment": ["fryer", "oven"],
       "category": "Side Fries & Tots",
       "price": 7.99,
+      "modifiers": ["Sauces"],
       "description": "Crispy, seasoned tater tots topped with cheddar cheese sauce, pickled jalapenos, and smoky bacon bits."
     },
     {
@@ -180,6 +214,7 @@
       "equipment": ["fryer"],
       "category": "Side Fries & Tots",
       "price": 7.99,
+      "modifiers": ["Sauces"],
       "description": "Crispy, seasoned french fries topped with cheddar cheese sauce, sweet caramelized onions, and our housemade Signature Sauce, served with a side of ketchup."
     },
     {
@@ -189,6 +224,7 @@
       "equipment": ["fryer"],
       "category": "Side Fries & Tots",
       "price": 4.49,
+      "modifiers": ["Sauces"],
       "description": "Crispy, seasoned tater tots served with a side of ketchup."
     },
     {
@@ -198,6 +234,7 @@
       "equipment": ["fryer"],
       "category": "Side Fries & Tots",
       "price": 5.99,
+      "modifiers": ["Sauces"],
       "description": "Crispy, garlic-seasoned french fries drizzled with a bold roasted garlic aioli."
     },
     {
@@ -207,6 +244,7 @@
       "equipment": ["fryer"],
       "category": "Side Fries & Tots",
       "price": 5.99,
+      "modifiers": ["Sauces"],
       "description": "Crispy, seasoned sweet potato fries served with a side of ketchup."
     },
     {
@@ -216,6 +254,7 @@
       "equipment": ["fryer"],
       "category": "Side Fries & Tots",
       "price": 7.99,
+      "modifiers": ["Sauces"],
       "description": "Crispy, seasoned tater tots topped with cheddar cheese sauce, sweet caramelized onions, and our housemade Signature Sauce."
     },
     {
@@ -225,6 +264,7 @@
       "equipment": ["fryer"],
       "category": "Side Fries & Tots",
       "price": 5.99,
+      "modifiers": ["Sauces"],
       "description": "Crispy, seasoned french fries drizzled with zesty our lemon pepper butter sauce and topped with fresh crumbled feta cheese."
     },
     {

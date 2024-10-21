@@ -1,0 +1,15 @@
+{
+  "name": "demopages",
+  "version": "1.0.0",
+  "description": "### 1. Menu Item Management - Display menu items in a grid layout with images and descriptions - Mark menu items as 86'd (unavailable) with a specific reason   - 86'd items are visually indicated with a diagonal \"86ed\" ribbon - Un-86 items when they become available again - Each menu item displays associated ingredients and equipment as badges",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.7"
+  }
+}
