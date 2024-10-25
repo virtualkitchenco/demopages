@@ -31,19 +31,19 @@
             "fullName": "Channce E.",
             "displayId": "7C8D1",
             "platformName": "Uber Eats",
-            "etaMinutes": 15
+            "estimatedReadyTime": "2024-10-25T19:54:33.408Z"
         },
         {
             "fullName": "Gary S",
             "displayId": "b434fd13",
             "platformName": "Doordash",
-            "etaMinutes": 2
+            "estimatedReadyTime": "2024-10-25T19:35:56.55Z"
         },
         {
             "fullName": "Siyuan Z",
             "displayId": "4aaa31e7",
             "platformName": "Doordash",
-            "etaMinutes": 5
+            "estimatedReadyTime": "2024-10-25T19:35:56.55Z"
         }
     ]
 }

@@ -67,50 +67,61 @@
         const updateOrders = (inProgressOrders, readyOrders) => {
             const inProgressOrdersDom = document.getElementById('in-progress-orders');
             const readyOrdersDom = document.getElementById('ready-orders');
+
+            // Clear existing list items
+            inProgressOrdersDom.innerHTML = '';
+            readyOrdersDom.innerHTML = '';
+
             const platformLogos = {
                 'Doordash': 'https://storefront-image-bucket-production.s3.amazonaws.com/8dde3978-d3c3-45f6-8fa3-897651af6dd2-doordash.jpeg',
-                'Uber Eats': 'https://storefront-image-bucket-production.s3.us-west-2.amazonaws.com/9a35a47a-7c5b-4d42-a851-fa96876c2690-ubereats.jpeg'
+                'Uber Eats': 'https://storefront-image-bucket-production.s3.us-west-2.amazonaws.com/9a35a47a-7c5b-4d42-a851-fa96876c2690-ubereats.jpeg',
+                'OST': 'https://storefront-image-bucket-sandbox.s3.us-west-2.amazonaws.com/1c2b8715-14ab-4563-997c-8d1684feb18f-ADKLogo_Bagb_BlackOnBB.jpg',
+                'All Day': 'https://storefront-image-bucket-sandbox.s3.us-west-2.amazonaws.com/3bc6ff0d-2033-43ba-ad07-8284f3079bc8-AllDay-Logo-Primary%20Stacked-2c.png',
             };
-            inProgressOrders
-                .sort((a, b) => a.etaMinutes - b.etaMinutes) // Sort orders by etaMinutes in ascending order
-                .forEach(order => {
-                    const li = document.createElement('li');
-                    const img = document.createElement('img');
-                    img.src = platformLogos[order.platformName];
-                    img.alt = order.platformName;
-                    img.style.width = '20px';
-                    img.style.marginRight = '10px';
 
-                    // Calculate the percentage of the progress (inverted)
-                    const progressPercentage = ((15 - order.etaMinutes) / 15) * 100;
-
-                    // Set the background as a progress bar
-                    li.style.background = `linear-gradient(to right, lightgreen ${progressPercentage}%, #f0f0f0 ${progressPercentage}%)`;
-                    li.style.padding = '10px';
-                    li.style.marginBottom = '5px';
-                    li.style.borderRadius = '5px';
-
-                    li.appendChild(img);
-                    // Append order ID and ETA minutes on the right
-                    li.appendChild(document.createTextNode(`${order.fullName} ${order.displayId}`));
-                    const etaSpan = document.createElement('span');
-                    etaSpan.style.float = 'right';
-                    etaSpan.textContent = `${order.etaMinutes} min`;
-                    li.appendChild(etaSpan);
-
-                    inProgressOrdersDom.appendChild(li);
-                });
-
-            readyOrders.forEach(order => {
+            const createOrderElement = (order, isReady) => {
                 const li = document.createElement('li');
+                li.style.opacity = '0'; // Start with opacity 0 for fade-in effect
+                li.style.transition = 'opacity 0.5s'; // Transition for fade-in
+
                 const img = document.createElement('img');
                 img.src = platformLogos[order.platformName];
                 img.alt = order.platformName;
                 img.style.width = '20px';
                 img.style.marginRight = '10px';
+                const etaMinutes = Math.round((new Date(order.estimatedReadyTime) - new Date()) / (1000 * 60));
+                if (!isReady && etaMinutes > 0) {
+                    const progressPercentage = ((15 - etaMinutes) / 15) * 100;
+                    li.style.background = `linear-gradient(to right, lightgreen ${progressPercentage}%, #f0f0f0 ${progressPercentage}%)`;
+                }
 
                 li.appendChild(img);
                 li.appendChild(document.createTextNode(`${order.fullName} ${order.displayId}`));
+
+                if (!isReady && etaMinutes > 0) {
+                    const etaSpan = document.createElement('span');
+                    etaSpan.style.float = 'right';
+                    etaSpan.textContent = `${etaMinutes} min`;
+                    li.appendChild(etaSpan);
+                }
+
+                // Append the element and trigger the fade-in
+                setTimeout(() => {
+                    li.style.opacity = '1';
+                }, 0);
+
+                return li;
+            };
+
+            inProgressOrders
+                .sort((a, b) => a.estimatedReadyTime - b.estimatedReadyTime)
+                .forEach(order => {
+                    const li = createOrderElement(order, false);
+                    inProgressOrdersDom.appendChild(li);
+                });
+
+            readyOrders.forEach(order => {
+                const li = createOrderElement(order, true);
                 readyOrdersDom.appendChild(li);
             });
         }
@@ -118,6 +129,7 @@
             fetch('courier-orders.json')
                 .then(response => response.json())
                 .then(data => {
+                    window.data = data;
                     updateOrders(data.inProgressOrders, data.readyOrders);
                 })
                 .catch(error => console.error('Error fetching data:', error));
