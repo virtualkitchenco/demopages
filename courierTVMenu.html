@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WingStar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #ffd700;
+        }
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            overflow-y: auto;
+            max-height: 90vh; /* Adjust height to fit within the screen */
+        }
+        .menu-category {
+            width: 100%; /* Ensure full width in grid layout */
+            margin-bottom: 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .menu-category.active {
+            opacity: 1;
+        }
+        .menu-item {
+            background-color: #333333;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .menu-item h3 {
+            margin: 0;
+            color: #ffd700;
+        }
+        .menu-item p {
+            margin: 5px 0 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WingStar</h1>
+        <div class="menu-container" id="menu-container">
+            <!-- Menu categories will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const menuContainer = document.getElementById('menu-container');
+
+        function displayMenuItems() {
+            const categories = [...new Set(menuData.map(item => item.category))];
+            categories.forEach(category => {
+                const categoryContainer = document.createElement('div');
+                categoryContainer.classList.add('menu-category', 'active');
+                
+                const items = menuData.filter(item => item.category === category);
+                const representativeImage = items[0].image; // Assuming each item has an 'image' property
+
+                categoryContainer.innerHTML = `
+                    <h2>${category}</h2>
+                    <img src="${representativeImage}" alt="${category} image" style="width: 100px; height: auto; display: block; margin-bottom: 10px;">
+                `;
+                
+                items.slice(0, 5).forEach(item => { // Limit items per category
+                    const menuItem = document.createElement('div');
+                    menuItem.classList.add('menu-item');
+                    menuItem.innerHTML = `
+                        <h3>${item.name}</h3>
+                        <p>Price: $${item.price.toFixed(2)}</p>
+                    `;
+                    categoryContainer.appendChild(menuItem);
+                });
+
+                menuContainer.appendChild(categoryContainer);
+            });
+        }
+
+        let menuData;
+        fetch('menu-items.json')
+            .then(response => response.json())
+            .then(data => {
+                menuData = data;
+                displayMenuItems();
+            })
+            .catch(error => console.error('Error fetching menu items:', error));
+    </script>
+</body>
+</html>

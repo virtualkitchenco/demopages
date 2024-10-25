@@ -6,7 +6,8 @@
       "equipment": ["fryer"],
       "price": 11.89,
       "category": "Classic Wings",
-      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
+      "description": "Our classic buffalo wings tossed in a tangy, spicy sauce. Crispy on the outside, juicy on the inside, and packed with flavor."
     },
     {
       "name": "Lemon Pepper Wet Wings",
@@ -15,7 +16,8 @@
       "equipment": ["fryer"],
       "price": 11.89,
       "category": "Classic Wings",
-      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
+      "description": "Crispy wings coated in a zesty lemon-pepper seasoning and drizzled with a buttery sauce for that perfect 'wet' finish."
     },
     {
       "name": "Korean BBQ Wings",
@@ -24,7 +26,8 @@
       "equipment": ["fryer"],
       "price": 11.89,
       "category": "Classic Wings",
-      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
+      "description": "A fusion favorite! Crispy wings glazed with a sweet and savory Korean BBQ sauce, topped with sesame seeds for added crunch."
     },
     {
       "name": "Szechuan Lemon Pepper Wings",
@@ -33,7 +36,8 @@
       "equipment": ["fryer"],
       "price": 11.89,
       "category": "Classic Wings",
-      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
+      "description": "A bold twist on lemon pepper, these wings are tossed in a spicy Szechuan peppercorn blend with a citrusy kick."
     },
     {
       "name": "Mango Habanero Wings",
@@ -42,7 +46,8 @@
       "equipment": ["fryer"],
       "price": 11.89,
       "category": "Classic Wings",
-      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
+      "description": "Sweet meets heat in these wings. Tropical mango flavor balanced with the fiery kick of habanero peppers."
     },
     {
       "name": "Garlic Parm Wings",
@@ -51,7 +56,8 @@
       "equipment": ["fryer"],
       "price": 11.89,
         "category": "Classic Wings",
-      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
+      "description": "Savory and aromatic, these wings are coated in a rich garlic and Parmesan cheese sauce, offering a delicious Italian-inspired flavor."
     },
     {
       "name": "Spicy Garlic Parm Wings",
@@ -60,7 +66,8 @@
       "equipment": ["fryer"],
       "price": 11.89,
       "category": "Classic Wings",
-      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
+      "description": "Our popular Garlic Parm wings with an extra kick! Creamy garlic Parmesan sauce meets spicy buffalo for a flavor explosion."
     },
     {
       "name": "Buffalo Teriyaki Wings",
@@ -69,7 +76,8 @@
       "equipment": ["fryer"],
       "price": 11.89,
       "category": "Classic Wings",
-      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
+      "description": "East meets West in these fusion wings. Tangy buffalo sauce blended with sweet and savory teriyaki for a unique flavor experience."
     },
     {
       "name": "Truffalo Wings",
@@ -78,7 +86,8 @@
       "equipment": ["fryer"],
       "price": 11.89,
       "category": "Classic Wings",
-      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
+      "description": "Elevate your wing game with these gourmet treats. Classic buffalo wings drizzled with truffle oil for a luxurious twist."
     },
     {
       "name": "Creamy Sriracha Wings",
@@ -87,7 +96,8 @@
       "equipment": ["fryer"],
       "price": 11.89,
         "category": "Classic Wings",
-      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
+      "description": "The perfect balance of creamy and spicy. These wings are coated in a smooth, zesty sriracha sauce with a hint of garlic."
     },
     {
       "name": "Carolina Reaper Wings",
@@ -96,7 +106,8 @@
       "equipment": ["fryer"],
       "price": 11.89,
       "category": "Classic Wings",
-      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
+      "description": "For extreme heat seekers only! These wings are coated in a fiery sauce made with one of the world's hottest peppers. Proceed with caution!"
     },
     {
       "name": "Teriyaki Wings",
@@ -105,7 +116,8 @@
       "equipment": ["fryer"],
       "price": 11.89,
       "category": "Classic Wings",
-      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"]
+      "modifiers": ["Sauces", "Drinks", "Dessert", "Side Fries & Tots"],
+      "description": "A crowd-pleaser, these wings are glazed with a sweet and savory teriyaki sauce, offering a delightful Asian-inspired flavor profile."
     },
     {
       "name": "Buffalo Boneless",

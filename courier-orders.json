@@ -1,0 +1,49 @@
+{
+    "readyOrders": [
+        {
+            "fullName": "Kostas M",
+            "displayId": "3f411c6c",
+            "platformName": "Doordash"
+        },
+        {
+            "fullName": "La S",
+            "displayId": "43ebda00",
+            "platformName": "Doordash"
+        },
+        {
+            "fullName": "Cole W.",
+            "displayId": "42B9E",
+            "platformName": "Uber Eats"
+        },
+        {
+            "fullName": "Kevin Y",
+            "displayId": "19c56fcb",
+            "platformName": "Doordash"
+        },
+        {
+            "fullName": "Noushin M.",
+            "displayId": "1B825",
+            "platformName": "Uber Eats"
+        }
+    ],
+    "inProgressOrders": [
+        {
+            "fullName": "Channce E.",
+            "displayId": "7C8D1",
+            "platformName": "Uber Eats",
+            "etaMinutes": 15
+        },
+        {
+            "fullName": "Gary S",
+            "displayId": "b434fd13",
+            "platformName": "Doordash",
+            "etaMinutes": 2
+        },
+        {
+            "fullName": "Siyuan Z",
+            "displayId": "4aaa31e7",
+            "platformName": "Doordash",
+            "etaMinutes": 5
+        }
+    ]
+}
