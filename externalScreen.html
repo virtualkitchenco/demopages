@@ -100,6 +100,7 @@
             opacity: 0; /* Start with opacity 0 for fade-in effect */
             transition: opacity 0.5s; /* Transition for fade-in */
             align-items: center; /* Center content vertically */
+            height: 1.1em;
         }
 
         #ready-orders li {
@@ -107,19 +108,26 @@
         }
 
         .order-img {
-            width: 50px;
+            float: left;
+            width: 35px;
             margin-right: 20px;
-            /* margin-top: 5px; */
             align-self: center; /* Center the image vertically */
+            opacity: 0.8;
         }
 
         .display-id-span {
-            display: inline-block;
+            float: left;
             width: 180px; /* Adjust width as needed */
+        }
+
+        .full-name-span {
+            float: left;
+            font-size: 1em;
         }
 
         .eta-span {
             float: right;
+            font-size: 1em;
         }
 
         .fade-in {
@@ -128,6 +136,12 @@
     </style>
 </head>
 <body>
+    <div class="image-container" id="ad-image-container">
+        <img src="images/ad.png" alt="Ad Image">
+    </div>
+    <div class="image-container" id="menu-image-container">
+        <img src="images/menu.png" alt="Menu Image">
+    </div>
     <div class="container active" id="order-list-container">
         <div class="column">
             <h2><span>COMING</span></h2>
@@ -137,12 +151,6 @@
             <h2><span>READY FOR PICKUP</span></h2>
             <ul id="ready-orders"></ul>
         </div>
-    </div>
-    <div class="image-container" id="ad-image-container">
-        <img src="images/ad.png" alt="Ad Image">
-    </div>
-    <div class="image-container" id="menu-image-container">
-        <img src="images/menu.png" alt="Menu Image">
     </div>
     <script>
         const updateOrders = (inProgressOrders, readyOrders) => {
@@ -176,9 +184,13 @@
                 displayIdSpan.classList.add('display-id-span');
                 displayIdSpan.textContent = truncatedDisplayId;
 
+                const fullNameSpan = document.createElement('span');
+                fullNameSpan.classList.add('full-name-span');
+                fullNameSpan.textContent = ` ${order.fullName}`;
+
                 li.appendChild(img);
                 li.appendChild(displayIdSpan);
-                li.appendChild(document.createTextNode(` ${order.fullName}`));
+                li.appendChild(fullNameSpan);
 
                 // Alternate background opacity
                 const baseColor = isReady ? 'rgba(173, 216, 230,' : 'rgba(144, 238, 144,';
@@ -238,7 +250,7 @@
                 containers[currentIndex].classList.add('active');
                 containers[currentIndex].style.opacity = 1;
 
-                const displayDurations = [30000, 5000, 10000];
+                const displayDurations = [60000, 5000, 10000];
                 setTimeout(showNextContainer, displayDurations[currentIndex]);
             };
 
