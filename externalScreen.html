@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Status</title>
+    <!-- Add Google Fonts link -->
+    <link href="https://fonts.googleapis.com/css2?family=Gruppo&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
+            font-family: 'Gruppo', Arial, sans-serif; /* Use Gruppo font */
+            background-color: rgba(219, 200, 200, 0.85);
             color: #333;
             display: flex;
             justify-content: center;
@@ -19,20 +21,18 @@
         .container {
             display: flex;
             justify-content: space-between;
-            width: 80%;
-            max-width: 800px;
+            width: 96%;
+            height: 90%;
         }
 
         .column {
             width: 45%;
-            background-color: #fff;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         h2 {
-            font-size: 1.5em;
+            font-size: 4em;
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
@@ -44,11 +44,37 @@
         }
 
         li {
-            font-size: 1.2em;
+            font-size: 3em;
             margin: 5px 0;
             padding: 10px;
-            background-color: lightgreen;
-            border-radius: 5px;
+            background-color: rgba(144, 238, 144, 0.4); /* Existing background color */
+            border-radius: 10px;
+            opacity: 0; /* Start with opacity 0 for fade-in effect */
+            transition: opacity 0.5s; /* Transition for fade-in */
+            align-items: center; /* Center content vertically */
+        }
+        #ready-orders li {
+            background-color: rgba(173, 216, 230, 0.6); /* Light blue background */
+        }
+
+        .order-img {
+            width: 50px;
+            margin-right: 20px;
+            /* margin-top: 5px; */
+            align-self: center; /* Center the image vertically */
+        }
+
+        .display-id-span {
+            display: inline-block;
+            width: 220px; /* Adjust width as needed */
+        }
+
+        .eta-span {
+            float: right;
+        }
+
+        .fade-in {
+            opacity: 1;
         }
     </style>
 </head>
@@ -79,35 +105,46 @@
                 'All Day': 'https://storefront-image-bucket-sandbox.s3.us-west-2.amazonaws.com/3bc6ff0d-2033-43ba-ad07-8284f3079bc8-AllDay-Logo-Primary%20Stacked-2c.png',
             };
 
-            const createOrderElement = (order, isReady) => {
+            const createOrderElement = (order, isReady, index) => {
                 const li = document.createElement('li');
-                li.style.opacity = '0'; // Start with opacity 0 for fade-in effect
-                li.style.transition = 'opacity 0.5s'; // Transition for fade-in
 
                 const img = document.createElement('img');
                 img.src = platformLogos[order.platformName];
                 img.alt = order.platformName;
-                img.style.width = '20px';
-                img.style.marginRight = '10px';
-                const etaMinutes = Math.round((new Date(order.estimatedReadyTime) - new Date()) / (1000 * 60));
-                if (!isReady && etaMinutes > 0) {
-                    const progressPercentage = ((15 - etaMinutes) / 15) * 100;
-                    li.style.background = `linear-gradient(to right, lightgreen ${progressPercentage}%, #f0f0f0 ${progressPercentage}%)`;
-                }
+                img.classList.add('order-img');
+
+                // Truncate displayId to a maximum of 8 characters
+                const truncatedDisplayId = order.displayId.substring(0, 8);
+
+                // Create a span for displayId with fixed width
+                const displayIdSpan = document.createElement('span');
+                displayIdSpan.classList.add('display-id-span');
+                displayIdSpan.textContent = truncatedDisplayId;
 
                 li.appendChild(img);
-                li.appendChild(document.createTextNode(`${order.fullName} ${order.displayId}`));
+                li.appendChild(displayIdSpan);
+                li.appendChild(document.createTextNode(` ${order.fullName}`));
 
+                // Alternate background opacity
+                const baseColor = isReady ? 'rgba(173, 216, 230,' : 'rgba(144, 238, 144,';
+                const opacity = index % 2 === 0 ? '0.5' : '0.2';
+
+                const etaMinutes = Math.round((new Date(order.estimatedReadyTime) - new Date()) / (1000 * 60));
                 if (!isReady && etaMinutes > 0) {
+                    const progressPercentage = ((30 - etaMinutes) / 30) * 100;
+                    li.style.background = `linear-gradient(to right, rgba(144, 238, 144, ${opacity}) ${progressPercentage}%, rgb(219, 200, 200) ${progressPercentage}%)`;
+
                     const etaSpan = document.createElement('span');
-                    etaSpan.style.float = 'right';
+                    etaSpan.classList.add('eta-span');
                     etaSpan.textContent = `${etaMinutes} min`;
                     li.appendChild(etaSpan);
                 }
 
+                li.style.backgroundColor = `${baseColor} ${opacity})`;
+
                 // Append the element and trigger the fade-in
                 setTimeout(() => {
-                    li.style.opacity = '1';
+                    li.classList.add('fade-in');
                 }, 0);
 
                 return li;
@@ -115,13 +152,13 @@
 
             inProgressOrders
                 .sort((a, b) => a.estimatedReadyTime - b.estimatedReadyTime)
-                .forEach(order => {
-                    const li = createOrderElement(order, false);
+                .forEach((order, index) => {
+                    const li = createOrderElement(order, false, index);
                     inProgressOrdersDom.appendChild(li);
                 });
 
-            readyOrders.forEach(order => {
-                const li = createOrderElement(order, true);
+            readyOrders.forEach((order, index) => {
+                const li = createOrderElement(order, true, index);
                 readyOrdersDom.appendChild(li);
             });
         }
