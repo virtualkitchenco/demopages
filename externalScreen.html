@@ -186,7 +186,9 @@
 
                 const fullNameSpan = document.createElement('span');
                 fullNameSpan.classList.add('full-name-span');
-                fullNameSpan.textContent = ` ${order.fullName}`;
+                // Truncate fullName to a maximum of 10 characters
+                const truncatedFullName = order.fullName.length > 10 ? order.fullName.substring(0, 10) + '...' : order.fullName;
+                fullNameSpan.textContent = ` ${truncatedFullName}`;
 
                 li.appendChild(img);
                 li.appendChild(displayIdSpan);
@@ -250,7 +252,7 @@
                 containers[currentIndex].classList.add('active');
                 containers[currentIndex].style.opacity = 1;
 
-                const displayDurations = [60000, 5000, 10000];
+                const displayDurations = [30000, 5000, 10000];
                 setTimeout(showNextContainer, displayDurations[currentIndex]);
             };
 
@@ -259,7 +261,7 @@
 
         const generateRandomOrders = () => {
             const platforms = ['Doordash', 'Uber Eats', 'OST', 'All Day'];
-            const firstNames = ['John', 'Jane', 'Alex', 'Chris', 'Pat', 'Taylor'];
+            const firstNames = ['Johnffdaffafadfadfadfaefafeefea', 'Jane', 'Alex', 'Chris', 'Pat', 'Taylor'];
             const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia'];
 
             const randomOrder = () => {
