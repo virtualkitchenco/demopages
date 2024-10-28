@@ -13,16 +13,36 @@
             color: #333;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
         }
 
-        .container {
-            display: flex;
-            justify-content: space-between;
-            width: 96%;
-            height: 90%;
+        .container, .image-container {
+            display: none; /* Initially hide all containers */
+            width: 100vw; /* Full viewport width */
+            height: 100vh; /* Full viewport height */
+            position: absolute;
+            transition: opacity 1s ease-in-out; /* Smooth transition */
+        }
+
+        .image-container {
+            display: flex; /* Ensure it's displayed as a flex container */
+            width: 100vw; /* Full viewport width */
+            height: 100vh; /* Full viewport height */
+            justify-content: center;
+            align-items: center;
+            position: fixed; /* Use fixed to ensure it covers the entire screen */
+            top: 0; /* Align to the top of the viewport */
+            left: 0; /* Align to the left of the viewport */
+        }
+
+        .active {
+            display: flex; /* Show active container */
+            opacity: 1;
+        }
+
+        .image-container img {
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            object-fit: cover; /* Ensures the image covers the container, cropping if necessary */
         }
 
         .column {
@@ -32,7 +52,7 @@
         }
 
         h2 {
-            font-size: 4em;
+            font-size: 3em;
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
@@ -44,7 +64,7 @@
         }
 
         li {
-            font-size: 3em;
+            font-size: 2em;
             margin: 5px 0;
             padding: 10px;
             background-color: rgba(144, 238, 144, 0.4); /* Existing background color */
@@ -53,6 +73,7 @@
             transition: opacity 0.5s; /* Transition for fade-in */
             align-items: center; /* Center content vertically */
         }
+
         #ready-orders li {
             background-color: rgba(173, 216, 230, 0.6); /* Light blue background */
         }
@@ -66,7 +87,7 @@
 
         .display-id-span {
             display: inline-block;
-            width: 220px; /* Adjust width as needed */
+            width: 150px; /* Adjust width as needed */
         }
 
         .eta-span {
@@ -79,7 +100,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container active" id="order-list-container">
         <div class="column">
             <h2><span>COMING</span></h2>
             <ul id="in-progress-orders"></ul>
@@ -88,6 +109,12 @@
             <h2><span>SERVED</span></h2>
             <ul id="ready-orders"></ul>
         </div>
+    </div>
+    <div class="image-container" id="ad-image-container">
+        <img src="images/ad.png" alt="Ad Image">
+    </div>
+    <div class="image-container" id="menu-image-container">
+        <img src="images/menu.png" alt="Menu Image">
     </div>
     <script>
         const updateOrders = (inProgressOrders, readyOrders) => {
@@ -162,12 +189,39 @@
                 readyOrdersDom.appendChild(li);
             });
         }
+
+        const cycleDisplays = () => {
+            const containers = [
+                document.getElementById('order-list-container'),
+                document.getElementById('ad-image-container'),
+                document.getElementById('menu-image-container')
+            ];
+            let currentIndex = -1; // Start at -1 so the first increment sets it to 0
+
+            const showNextContainer = () => {
+                containers.forEach((container, index) => {
+                    container.classList.remove('active');
+                    container.style.opacity = 0;
+                });
+
+                currentIndex = (currentIndex + 1) % containers.length;
+                containers[currentIndex].classList.add('active');
+                containers[currentIndex].style.opacity = 1;
+
+                const displayDurations = [20000, 5000, 10000];
+                setTimeout(showNextContainer, displayDurations[currentIndex]);
+            };
+
+            showNextContainer();
+        };
+
         document.addEventListener('DOMContentLoaded', () => {
             fetch('courier-orders.json')
                 .then(response => response.json())
                 .then(data => {
                     window.data = data;
                     updateOrders(data.inProgressOrders, data.readyOrders);
+                    cycleDisplays();
                 })
                 .catch(error => console.error('Error fetching data:', error));
         });
