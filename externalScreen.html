@@ -9,22 +9,22 @@
     <style>
         body {
             font-family: 'Gruppo', Arial, sans-serif; /* Use Gruppo font */
-            background-color: rgba(219, 200, 200, 0.85);
+            background-color: rgb(219, 200, 200);
             color: #333;
             display: flex;
             justify-content: center;
         }
 
         .container, .image-container {
-            display: none; /* Initially hide all containers */
+            opacity: 0;
             width: 100vw; /* Full viewport width */
             height: 100vh; /* Full viewport height */
             position: absolute;
-            transition: opacity 1s ease-in-out; /* Smooth transition */
+            transition: visibility 2s, opacity 2s linear;
+            opacity: 0; /* Start with opacity 0 */
         }
 
         .image-container {
-            display: flex; /* Ensure it's displayed as a flex container */
             width: 100vw; /* Full viewport width */
             height: 100vh; /* Full viewport height */
             justify-content: center;
@@ -36,7 +36,7 @@
 
         .active {
             display: flex; /* Show active container */
-            opacity: 1;
+            opacity: 1; /* Fully visible */
         }
 
         .image-container img {
@@ -47,8 +47,35 @@
 
         .column {
             width: 45%;
-            padding: 20px;
+            margin: 100px 40px;
             border-radius: 8px;
+            max-height: 80vh; /* Set a maximum height for scrolling */
+            overflow-y: auto; /* Enable scrolling */
+            position: relative; /* For sticky positioning */
+        }
+
+        .column h2 {
+            position: fixed;
+            top: 0;
+            z-index: 1; /* Ensure it stays on top */
+            background-color: rgb(219, 200, 200);
+            width: 100%;
+        }
+
+        .order-list {
+            overflow-y: auto; /* Enable scrolling */
+            height: calc(80vh - 3em); /* Adjust height to account for the title */
+            padding-right: 20px; /* Add padding to prevent content from being cut off */
+        }
+
+        /* Ensure the list has a fixed height to allow scrolling */
+        #in-progress-orders, #ready-orders {
+            max-height: 70vh; /* Set a maximum height */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+
+        .order-list::-webkit-scrollbar {
+            display: none; /* Hide scrollbar for WebKit browsers */
         }
 
         h2 {
@@ -87,7 +114,7 @@
 
         .display-id-span {
             display: inline-block;
-            width: 150px; /* Adjust width as needed */
+            width: 180px; /* Adjust width as needed */
         }
 
         .eta-span {
@@ -154,12 +181,12 @@
 
                 // Alternate background opacity
                 const baseColor = isReady ? 'rgba(173, 216, 230,' : 'rgba(144, 238, 144,';
-                const opacity = index % 2 === 0 ? '0.5' : '0.2';
+                const opacity = index % 2 === 0 ? '0.4' : '0.1';
 
                 const etaMinutes = Math.round((new Date(order.estimatedReadyTime) - new Date()) / (1000 * 60));
                 if (!isReady && etaMinutes > 0) {
                     const progressPercentage = ((30 - etaMinutes) / 30) * 100;
-                    li.style.background = `linear-gradient(to right, rgba(144, 238, 144, ${opacity}) ${progressPercentage}%, rgb(219, 200, 200) ${progressPercentage}%)`;
+                    li.style.background = `linear-gradient(to right, rgba(144, 238, 144, ${opacity}) ${progressPercentage}%, rgb(210, 192, 192) ${progressPercentage}%)`;
 
                     const etaSpan = document.createElement('span');
                     etaSpan.classList.add('eta-span');
@@ -188,6 +215,8 @@
                 const li = createOrderElement(order, true, index);
                 readyOrdersDom.appendChild(li);
             });
+            scrollOrders(inProgressOrdersDom);
+            scrollOrders(readyOrdersDom);
         }
 
         const cycleDisplays = () => {
@@ -208,22 +237,121 @@
                 containers[currentIndex].classList.add('active');
                 containers[currentIndex].style.opacity = 1;
 
-                const displayDurations = [20000, 5000, 10000];
+                const displayDurations = [30000, 5000, 10000];
                 setTimeout(showNextContainer, displayDurations[currentIndex]);
             };
 
             showNextContainer();
         };
 
+        const generateRandomOrders = () => {
+            const platforms = ['Doordash', 'Uber Eats', 'OST', 'All Day'];
+            const firstNames = ['John', 'Jane', 'Alex', 'Chris', 'Pat', 'Taylor'];
+            const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia'];
+
+            const randomOrder = () => {
+                const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+                const lastNameInitial = lastNames[Math.floor(Math.random() * lastNames.length)].charAt(0);
+                const fullName = `${firstName} ${lastNameInitial}.`;
+
+                return {
+                    fullName: fullName,
+                    displayId: Math.random().toString(36).substring(2, 10).toUpperCase(),
+                    platformName: platforms[Math.floor(Math.random() * platforms.length)],
+                    estimatedReadyTime: new Date(Date.now() + (Math.random() * 14 + 1) * 60000).toISOString()
+                };
+            };
+
+            // Generate a random number of orders between 1 and 10
+            const numInProgressOrders = Math.floor(Math.random() * 10) + 1;
+            const numReadyOrders = Math.floor(Math.random() * 10) + 1;
+
+            const inProgressOrders = Array.from({ length: numInProgressOrders }, randomOrder);
+            const readyOrders = Array.from({ length: numReadyOrders }, randomOrder);
+
+            return { inProgressOrders, readyOrders };
+        };
+
+        const updateOrdersOnDoubleClick = () => {
+            const data = generateRandomOrders();
+            updateOrders(data.inProgressOrders, data.readyOrders);
+            console.log(data, 'double clicked or tapped');
+        };
+
+        const detectDoubleTap = (element, callback) => {
+            let lastTap = 0;
+            element.addEventListener('touchend', (event) => {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTap;
+                if (tapLength < 500 && tapLength > 0) {
+                    event.preventDefault();
+                    callback();
+                }
+                lastTap = currentTime;
+            });
+        };
+
+        const scrollOrders = (element) => {
+            console.log('scrolling', element);
+            const scrollHeight = element.scrollHeight;
+            const clientHeight = element.clientHeight;
+
+            // if (scrollHeight <= clientHeight) {
+            //     console.log('No need to scroll, content fits within the view.');
+            //     return; // No need to scroll if content fits
+            // }
+
+            const scrollDuration = 5000; // 5 seconds
+            const scrollInterval = 20; // 20 milliseconds
+            const scrollStep = (scrollHeight - clientHeight) / (scrollDuration / scrollInterval);
+
+            let scrollPosition = 0;
+            let scrollingDown = true;
+
+            const scroll = () => {
+                if (scrollingDown) {
+                    if (scrollPosition < scrollHeight - clientHeight) {
+                        scrollPosition += scrollStep;
+                        element.scrollTop = scrollPosition;
+                    } else {
+                        // scrollingDown = false;
+                        // console.log('Reached the bottom, scrolling back to top.');
+                        // // Smoothly scroll back to the top
+                        // element.scrollTo({ top: 0, behavior: 'smooth' });
+                        // setTimeout(scroll, scrollDuration); // Wait for the smooth scroll to finish
+                        return;
+                    }
+                } else {
+                    if (scrollPosition > 0) {
+                        scrollPosition -= scrollStep;
+                        element.scrollTop = scrollPosition;
+                    } else {
+                        scrollingDown = true;
+                    }
+                }
+                setTimeout(scroll, scrollInterval);
+            };
+
+            scroll();
+        };
+
         document.addEventListener('DOMContentLoaded', () => {
-            fetch('courier-orders.json')
-                .then(response => response.json())
-                .then(data => {
-                    window.data = data;
-                    updateOrders(data.inProgressOrders, data.readyOrders);
-                    cycleDisplays();
-                })
-                .catch(error => console.error('Error fetching data:', error));
+            const loadRandomOrders = () => {
+                const data = generateRandomOrders();
+                updateOrders(data.inProgressOrders, data.readyOrders);
+                cycleDisplays();
+            };
+
+            // Ensure the event listener is correctly attached
+            document.body.addEventListener('dblclick', updateOrdersOnDoubleClick);
+            detectDoubleTap(document.body, updateOrdersOnDoubleClick);
+
+            // Initial load with random orders
+            loadRandomOrders();
+            const inProgressOrdersDom = document.getElementById('in-progress-orders');
+            const readyOrdersDom = document.getElementById('ready-orders');
+            scrollOrders(inProgressOrdersDom);
+            scrollOrders(readyOrdersDom);
         });
     </script>
 </body>
