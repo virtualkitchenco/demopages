@@ -184,7 +184,7 @@
                 const baseColor = isReady ? 'rgba(173, 216, 230,' : 'rgba(144, 238, 144,';
                 const opacity = index % 2 === 0 ? '0.4' : '0.1';
 
-                const etaMinutes = Math.round((new Date(order.estimatedReadyTime) - new Date()) / (1000 * 60));
+                const etaMinutes = Math.round((new Date(order.estimatedReadyTime) - new Date(new Date().toUTCString())) / (1000 * 60));
                 if (!isReady && etaMinutes > 0) {
                     const progressPercentage = ((30 - etaMinutes) / 30) * 100;
                     li.style.background = `linear-gradient(to right, rgba(144, 238, 144, ${opacity}) ${progressPercentage}%, rgb(210, 192, 192) ${progressPercentage}%)`;
