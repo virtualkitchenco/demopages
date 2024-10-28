@@ -198,14 +198,15 @@
                 const baseColor = isReady ? 'rgba(173, 216, 230,' : 'rgba(144, 238, 144,';
                 const opacity = index % 2 === 0 ? '0.4' : '0.1';
 
-                const etaMinutes = Math.round((new Date(order.estimatedReadyTime) - new Date(new Date().toUTCString())) / (1000 * 60));
-                if (!isReady && etaMinutes > 0) {
+                let etaMinutes = Math.round((new Date(order.estimatedReadyTime) - new Date(new Date().toUTCString())) / (1000 * 60));
+                if (etaMinutes < 0) etaMinutes = 0;
+                if (!isReady && etaMinutes >= 0) {
                     const progressPercentage = ((30 - etaMinutes) / 30) * 100;
                     li.style.background = `linear-gradient(to right, rgba(144, 238, 144, ${opacity}) ${progressPercentage}%, rgb(210, 192, 192) ${progressPercentage}%)`;
 
                     const etaSpan = document.createElement('span');
                     etaSpan.classList.add('eta-span');
-                    etaSpan.textContent = `${etaMinutes} min`;
+                    if (etaMinutes > 0) etaSpan.textContent = `${etaMinutes} min`;
                     li.appendChild(etaSpan);
                 }
 
@@ -273,7 +274,7 @@
                     fullName: fullName,
                     displayId: Math.random().toString(36).substring(2, 10).toUpperCase(),
                     platformName: platforms[Math.floor(Math.random() * platforms.length)],
-                    estimatedReadyTime: new Date(Date.now() + (Math.random() * 14 + 1) * 60000).toISOString()
+                    estimatedReadyTime: new Date(Date.now() + (Math.random() * 30 + 1 - 10) * 60000).toISOString()
                 };
             };
 
