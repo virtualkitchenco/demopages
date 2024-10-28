@@ -133,7 +133,7 @@
             <ul id="in-progress-orders"></ul>
         </div>
         <div class="column">
-            <h2><span>SERVED</span></h2>
+            <h2><span>READY FOR PICKUP</span></h2>
             <ul id="ready-orders"></ul>
         </div>
     </div>
@@ -336,22 +336,15 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
-            const loadRandomOrders = () => {
-                const data = generateRandomOrders();
-                updateOrders(data.inProgressOrders, data.readyOrders);
-                cycleDisplays();
-            };
-
             // Ensure the event listener is correctly attached
             document.body.addEventListener('dblclick', updateOrdersOnDoubleClick);
             detectDoubleTap(document.body, updateOrdersOnDoubleClick);
 
-            // Initial load with random orders
-            loadRandomOrders();
             const inProgressOrdersDom = document.getElementById('in-progress-orders');
             const readyOrdersDom = document.getElementById('ready-orders');
             scrollOrders(inProgressOrdersDom);
             scrollOrders(readyOrdersDom);
+            cycleDisplays();
         });
     </script>
 </body>
