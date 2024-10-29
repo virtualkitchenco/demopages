@@ -34,6 +34,7 @@
             position: fixed; /* Use fixed to ensure it covers the entire screen */
             top: 0; /* Align to the top of the viewport */
             left: 0; /* Align to the left of the viewport */
+            z-index: 100;
         }
 
         .active {
@@ -165,7 +166,7 @@
     <div class="image-container" id="menu-image-container">
         <img src="images/menu.png" alt="Menu Image">
     </div>
-    <div class="container active" id="order-list-container">
+    <div class="container" id="order-list-container">
         <div class="column">
             <h2><span>COMING</span></h2>
             <ul id="in-progress-orders"></ul>
@@ -417,7 +418,13 @@
             const readyOrdersDom = document.getElementById('ready-orders');
             scrollOrders(inProgressOrdersDom);
             scrollOrders(readyOrdersDom);
-            cycleDisplays();
+
+            if (locationName) {
+                cycleDisplays();
+            } else {
+                // Show only the ad-image-container if locationName is not defined
+                document.getElementById('ad-image-container').classList.add('active');
+            }
         });
     </script>
 </body>
