@@ -6,6 +6,7 @@
     <title>Order Status</title>
     <!-- Add Google Fonts link -->
     <link href="https://fonts.googleapis.com/css2?family=Gruppo&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         body {
             font-family: 'Gruppo', Arial, sans-serif; /* Use Gruppo font */
@@ -133,6 +134,28 @@
         .fade-in {
             opacity: 1;
         }
+
+        .qr-ribbon {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.97);
+            padding: 15px;
+            border-top-left-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            font-family: 'Gruppo', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .qr-ribbon h3 {
+            margin: 0;
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -152,8 +175,24 @@
             <ul id="ready-orders"></ul>
         </div>
     </div>
+    <div id="qr-code" class="qr-ribbon" style="display: none;">
+        <h3>Order Here</h3>
+    </div>
     <script>
-        const updateOrders = (inProgressOrders, readyOrders) => {
+        const updateOrders = (inProgressOrders = null, readyOrders = null) => {
+            // Use provided orders or get from localStorage
+            if (inProgressOrders === null) {
+                inProgressOrders = JSON.parse(localStorage.getItem('inProgressOrders') || '[]');
+            } else {
+                localStorage.setItem('inProgressOrders', JSON.stringify(inProgressOrders));
+            }
+            
+            if (readyOrders === null) {
+                readyOrders = JSON.parse(localStorage.getItem('readyOrders') || '[]'); 
+            } else {
+                localStorage.setItem('readyOrders', JSON.stringify(readyOrders));
+            }
+
             const inProgressOrdersDom = document.getElementById('in-progress-orders');
             const readyOrdersDom = document.getElementById('ready-orders');
 
@@ -255,6 +294,7 @@
 
                 const displayDurations = [30000, 5000, 10000];
                 setTimeout(showNextContainer, displayDurations[currentIndex]);
+                updateOrders();
             };
 
             showNextContainer();
@@ -350,6 +390,23 @@
 
             scroll();
         };
+
+        const getQueryParameter = (name) => {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        };
+
+        const locationName = getQueryParameter('locationName');
+        if (locationName) {
+            const qrCodeContainer = document.getElementById('qr-code');
+            const qrCodeUrl = `https://panamaweb.onrender.com/home?locationName=${locationName}`;
+            new QRCode(qrCodeContainer, {
+                text: qrCodeUrl,
+                width: 100,
+                height: 100
+            });
+            qrCodeContainer.style.display = 'flex';
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             // Ensure the event listener is correctly attached
