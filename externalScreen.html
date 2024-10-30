@@ -278,7 +278,6 @@
 
         const cycleDisplays = () => {
             const containers = [
-                document.getElementById('order-list-container'),
                 document.getElementById('ad-image-container'),
                 document.getElementById('menu-image-container')
             ];
@@ -294,7 +293,7 @@
                 containers[currentIndex].classList.add('active');
                 containers[currentIndex].style.opacity = 1;
 
-                const displayDurations = [30000, 5000, 10000];
+                const displayDurations = [10000, 40000];
                 setTimeout(showNextContainer, displayDurations[currentIndex]);
                 updateOrders();
             };
@@ -399,6 +398,7 @@
         };
 
         const locationName = getQueryParameter('locationName');
+        const screenIndex = getQueryParameter('index');
         if (locationName) {
             const qrCodeContainer = document.getElementById('qr-code');
             const qrCodeUrl = `https://panamaweb.onrender.com/home?locationName=${locationName}`;
@@ -419,12 +419,13 @@
             const readyOrdersDom = document.getElementById('ready-orders');
             scrollOrders(inProgressOrdersDom);
             scrollOrders(readyOrdersDom);
-
-            if (locationName) {
-                cycleDisplays();
-            } else {
+            if (!locationName) {
                 // Show only the ad-image-container if locationName is not defined
                 document.getElementById('ad-image-container').classList.add('active');
+            } else if (!Number(screenIndex)) {
+                document.getElementById('order-list-container').classList.add('active');
+            } else {
+                cycleDisplays();
             }
         });
     </script>
