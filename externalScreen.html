@@ -119,17 +119,25 @@
 
         .display-id-span {
             float: left;
-            width: 180px; /* Adjust width as needed */
+            width: 130px; /* Reduced width to provide more room for names */
+            font-size: 0.6em; /* Smaller font size for order IDs */
+            display: flex;
+            align-items: flex-end; /* Align text to bottom */
+            height: 100%; /* Take full height of parent */
         }
 
         .full-name-span {
             float: left;
-            font-size: 1em;
+            font-size: 1.1em; /* Increased font size for customer names */
+            font-weight: bold; /* Make the font bolder */
         }
 
         .eta-span {
             float: right;
-            font-size: 1em;
+            font-size: 0.6em;
+            display: flex;
+            align-items: flex-end; /* Align text to bottom */
+            height: 100%; /* Take full height of parent */
         }
 
         .fade-in {
@@ -161,21 +169,21 @@
     </style>
 </head>
 <body>
-    <div class="image-container" id="ad-image-container">
-        <img src="images/ad.png" alt="Ad Image">
-    </div>
-    <div class="image-container" id="menu-image-container">
-        <img src="images/menu.png" alt="Menu Image">
-    </div>
     <div class="container" id="order-list-container">
         <div class="column">
-            <h2><span>COMING</span></h2>
+            <h2><span>COMING SOON</span></h2>
             <ul id="in-progress-orders"></ul>
         </div>
         <div class="column">
             <h2><span>READY FOR PICKUP</span></h2>
             <ul id="ready-orders"></ul>
         </div>
+    </div>
+    <div class="image-container" id="ad-image-container">
+        <img src="images/ad.png" alt="Ad Image">
+    </div>
+    <div class="image-container" id="menu-image-container">
+        <img src="images/menu.png" alt="Menu Image">
     </div>
     <div id="qr-code" class="qr-ribbon" style="display: none;">
         <h3>Order Here</h3>
@@ -228,7 +236,7 @@
                 const fullNameSpan = document.createElement('span');
                 fullNameSpan.classList.add('full-name-span');
                 // Truncate fullName to a maximum of 10 characters
-                const truncatedFullName = order.fullName.length > 10 ? order.fullName.substring(0, 10) + '...' : order.fullName;
+                const truncatedFullName = order.fullName.length > 15 ? order.fullName.substring(0, 15) + '...' : order.fullName;
                 fullNameSpan.textContent = ` ${truncatedFullName}`;
 
                 li.appendChild(img);
@@ -236,14 +244,14 @@
                 li.appendChild(fullNameSpan);
 
                 // Alternate background opacity
-                const baseColor = isReady ? 'rgba(173, 216, 230,' : 'rgba(144, 238, 144,';
+                const baseColor = isReady ? 'rgba(173, 216, 230,' : 'rgba(173, 216, 230,';
                 const opacity = index % 2 === 0 ? '0.4' : '0.1';
 
                 let etaMinutes = Math.round((new Date(order.estimatedReadyTime) - new Date(new Date().toUTCString())) / (1000 * 60));
                 if (etaMinutes < 0) etaMinutes = 0;
                 if (!isReady && etaMinutes >= 0) {
                     const progressPercentage = ((30 - etaMinutes) / 30) * 100;
-                    li.style.background = `linear-gradient(to right, rgba(144, 238, 144, ${opacity}) ${progressPercentage}%, rgb(210, 192, 192) ${progressPercentage}%)`;
+                    li.style.background = `linear-gradient(to right, rgba(173, 216, 230, 0.1) ${progressPercentage}%, rgb(210, 192, 192) ${progressPercentage}%)`;
 
                     const etaSpan = document.createElement('span');
                     etaSpan.classList.add('eta-span');
