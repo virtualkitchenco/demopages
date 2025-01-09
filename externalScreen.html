@@ -407,9 +407,9 @@
 
         const locationName = getQueryParameter('locationName');
         const screenIndex = getQueryParameter('index');
-        if (locationName) {
+        const qrCodeUrl = getQueryParameter('qrCodeUrl');
+        if (qrCodeUrl) {
             const qrCodeContainer = document.getElementById('qr-code');
-            const qrCodeUrl = `https://panamaweb.onrender.com/home?locationName=${locationName}`;
             new QRCode(qrCodeContainer, {
                 text: qrCodeUrl,
                 width: 100,
