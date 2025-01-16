@@ -166,6 +166,14 @@
             color: #333;
             margin-bottom: 10px;
         }
+
+        .sandbox-vr-logo {
+            position: fixed;
+            bottom: 20px;
+            right: 180px;
+            width: 300px; /* Adjust size as needed */
+            z-index: 3; /* Ensure it appears above other elements */
+        }
     </style>
 </head>
 <body>
@@ -416,6 +424,15 @@
                 height: 100
             });
             qrCodeContainer.style.display = 'flex';
+
+            // Check if qrCodeUrl contains 'sandboxvr'
+            if (qrCodeUrl.includes('sandboxvr')) {
+                const sandboxLogo = document.createElement('img');
+                sandboxLogo.src = 'images/sandboxvr/logo.png';
+                sandboxLogo.alt = 'Sandbox VR Logo';
+                sandboxLogo.classList.add('sandbox-vr-logo'); // Add class for styling
+                document.body.appendChild(sandboxLogo);
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
